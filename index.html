@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -11,10 +12,14 @@
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
 <style>
-*{box-sizing:border-box}
+
+*{
+box-sizing:border-box
+}
 
 body{
 margin:0;
@@ -224,8 +229,6 @@ gap:10px;
 flex-wrap:wrap
 }
 
-/* PASSWORD */
-
 .password-box{
 position:relative;
 width:100%
@@ -256,6 +259,13 @@ margin-top:-8px;
 margin-bottom:15px
 }
 
+.verify-note{
+font-size:13px;
+color:#64748b;
+margin-top:12px;
+text-align:center
+}
+
 @media(max-width:600px){
 
 header{
@@ -273,27 +283,34 @@ margin:25px 15px
 }
 
 }
+
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
+
+<!-- =====================================================
+HEADER
+===================================================== -->
 
 <header id="mainHeader" class="hidden">
 
 <h1>🎓 Student QR Attendance</h1>
 
-<button class="btn-danger" onclick="logout()">
+<button
+class="btn-danger"
+onclick="logout()"
+>
 Logout
 </button>
 
 </header>
 
 
-<!-- =========================
-     AUTH SECTION
-========================= -->
+<!-- =====================================================
+AUTH SECTION
+===================================================== -->
 
 <div id="authSection">
 
@@ -303,13 +320,15 @@ Logout
 
 <button
 class="btn-primary"
-onclick="showLogin()">
+onclick="showLogin()"
+>
 Login
 </button>
 
 <button
 class="btn-dark"
-onclick="showRegister()">
+onclick="showRegister()"
+>
 Register
 </button>
 
@@ -319,11 +338,14 @@ Register
 <div id="authMessage"></div>
 
 
-<!-- LOGIN -->
+<!-- =====================================================
+LOGIN
+===================================================== -->
 
 <div id="loginBox">
 
 <h2>Account Login</h2>
+
 
 <label>Email</label>
 
@@ -369,10 +391,17 @@ Login
 
 </button>
 
+
+<p class="verify-note">
+If your email is not verified yet, the system will automatically send a new verification email when you try to log in.
+</p>
+
 </div>
 
 
-<!-- REGISTER -->
+<!-- =====================================================
+REGISTER
+===================================================== -->
 
 <div id="registerBox" class="hidden">
 
@@ -476,9 +505,9 @@ Create Account
 </div>
 
 
-<!-- =========================
-     DASHBOARD
-========================= -->
+<!-- =====================================================
+DASHBOARD
+===================================================== -->
 
 <div id="dashboard" class="hidden">
 
@@ -504,7 +533,8 @@ Account:
 Role:
 <span
 id="userRole"
-class="role-badge">
+class="role-badge"
+>
 </span>
 </p>
 
@@ -687,25 +717,11 @@ All Groups
 
 <tr>
 
-<th>
-Student
-</th>
-
-<th>
-Grade
-</th>
-
-<th>
-Section
-</th>
-
-<th>
-Date
-</th>
-
-<th>
-Time In
-</th>
+<th>Student</th>
+<th>Grade</th>
+<th>Section</th>
+<th>Date</th>
+<th>Time In</th>
 
 </tr>
 
@@ -726,9 +742,9 @@ Time In
 
 <script>
 
-/* =========================================================
-   FIREBASE CONFIG
-========================================================= */
+/* =====================================================
+FIREBASE CONFIG
+===================================================== */
 
 const firebaseConfig = {
 
@@ -755,8 +771,10 @@ appId:
 
 firebase.initializeApp(firebaseConfig);
 
+
 const auth =
 firebase.auth();
+
 
 const db =
 firebase.firestore();
@@ -773,9 +791,9 @@ let attendance = [];
 let scanner = null;
 
 
-/* =========================================================
-   PASSWORD SHOW / HIDE
-========================================================= */
+/* =====================================================
+PASSWORD SHOW / HIDE
+===================================================== */
 
 function togglePassword(inputId,eyeId){
 
@@ -803,9 +821,9 @@ eye.textContent = "👁️";
 }
 
 
-/* =========================================================
-   AUTH UI
-========================================================= */
+/* =====================================================
+AUTH UI
+===================================================== */
 
 function showLogin(){
 
@@ -861,9 +879,9 @@ document
 }
 
 
-/* =========================================================
-   REGISTER
-========================================================= */
+/* =====================================================
+REGISTER
+===================================================== */
 
 async function register(){
 
@@ -944,7 +962,6 @@ return;
 
 try{
 
-
 const result =
 await auth
 .createUserWithEmailAndPassword(
@@ -958,11 +975,8 @@ result.user;
 
 
 /*
-Every normal registration starts as teacher.
-Admin role should only be assigned securely
-through Firebase/Admin controls.
+CREATE USER PROFILE
 */
-
 
 await db
 .collection("users")
@@ -989,40 +1003,44 @@ firebase
 
 
 /*
-EMAIL VERIFICATION
+SEND VERIFICATION EMAIL
 */
 
 await user.sendEmailVerification();
 
 
 showMessage(
-"Account created successfully! Check your email and verify your account before logging in.",
+"Account created successfully! A verification email has been sent. Please check your Inbox or Spam folder.",
 "success-message"
 );
 
 
+/*
+LOGOUT AFTER REGISTRATION
+*/
+
 await auth.signOut();
 
+
+/*
+CLEAR FORM
+*/
 
 document
 .getElementById("registerName")
 .value="";
 
-
 document
 .getElementById("registerEmail")
 .value="";
-
 
 document
 .getElementById("registerPhone")
 .value="";
 
-
 document
 .getElementById("registerPassword")
 .value="";
-
 
 document
 .getElementById("registerConfirmPassword")
@@ -1046,9 +1064,9 @@ friendlyFirebaseError(error),
 }
 
 
-/* =========================================================
-   LOGIN
-========================================================= */
+/* =====================================================
+LOGIN
+===================================================== */
 
 async function login(){
 
@@ -1091,12 +1109,51 @@ const user =
 result.user;
 
 
+/*
+CHECK EMAIL VERIFICATION
+*/
+
 if(!user.emailVerified){
 
+try{
+
+await user.sendEmailVerification();
+
+
 showMessage(
-"Please verify your email first. Check your inbox.",
+"Your email is not verified yet. A new verification email has been sent. Please check your Inbox or Spam folder.",
 "error-message"
 );
+
+}catch(error){
+
+console.error(
+"Verification email error:",
+error
+);
+
+
+if(
+error.code ===
+"auth/too-many-requests"
+){
+
+showMessage(
+"Firebase has temporarily limited verification emails. Please wait a few minutes and check your Inbox or Spam folder.",
+"error-message"
+);
+
+}else{
+
+showMessage(
+"Your email is not verified and Firebase could not send another verification email right now.",
+"error-message"
+);
+
+}
+
+}
+
 
 await auth.signOut();
 
@@ -1104,6 +1161,10 @@ return;
 
 }
 
+
+/*
+EMAIL VERIFIED
+*/
 
 await loadDashboard(user);
 
@@ -1122,9 +1183,9 @@ friendlyFirebaseError(error),
 }
 
 
-/* =========================================================
-   AUTH STATE
-========================================================= */
+/* =====================================================
+AUTH STATE
+===================================================== */
 
 auth.onAuthStateChanged(
 async user => {
@@ -1135,6 +1196,11 @@ return;
 
 }
 
+
+/*
+Do not automatically send email here.
+The login() function handles verification.
+*/
 
 if(!user.emailVerified){
 
@@ -1151,9 +1217,9 @@ await loadDashboard(user);
 );
 
 
-/* =========================================================
-   LOAD DASHBOARD
-========================================================= */
+/* =====================================================
+LOAD DASHBOARD
+===================================================== */
 
 async function loadDashboard(user){
 
@@ -1173,7 +1239,7 @@ await db
 if(!profile.exists){
 
 showMessage(
-"Account profile was not found.",
+"Account profile was not found. Please contact the administrator.",
 "error-message"
 );
 
@@ -1208,6 +1274,10 @@ return;
 
 }
 
+
+/*
+SHOW DASHBOARD
+*/
 
 document
 .getElementById("authSection")
@@ -1269,9 +1339,9 @@ error.message
 }
 
 
-/* =========================================================
-   LOGOUT
-========================================================= */
+/* =====================================================
+LOGOUT
+===================================================== */
 
 async function logout(){
 
@@ -1295,9 +1365,9 @@ location.reload();
 }
 
 
-/* =========================================================
-   ADD STUDENT
-========================================================= */
+/* =====================================================
+ADD STUDENT
+===================================================== */
 
 async function addStudent(){
 
@@ -1345,7 +1415,6 @@ return;
 
 try{
 
-
 const studentRef =
 db
 .collection("students")
@@ -1391,11 +1460,9 @@ document
 .getElementById("studentName")
 .value="";
 
-
 document
 .getElementById("studentGrade")
 .value="";
-
 
 document
 .getElementById("studentSection")
@@ -1424,9 +1491,9 @@ error.message
 }
 
 
-/* =========================================================
-   QR GENERATOR
-========================================================= */
+/* =====================================================
+QR GENERATOR
+===================================================== */
 
 function generateStudentQR(
 studentId,
@@ -1537,9 +1604,9 @@ height:256
 }
 
 
-/* =========================================================
-   LOAD STUDENTS
-========================================================= */
+/* =====================================================
+LOAD STUDENTS
+===================================================== */
 
 async function loadStudents(){
 
@@ -1586,9 +1653,9 @@ renderStudents();
 }
 
 
-/* =========================================================
-   GROUP FILTER
-========================================================= */
+/* =====================================================
+GROUP FILTER
+===================================================== */
 
 function createGroupFilter(){
 
@@ -1653,9 +1720,9 @@ s=>s.grade
 }
 
 
-/* =========================================================
-   RENDER STUDENTS
-========================================================= */
+/* =====================================================
+RENDER STUDENTS
+===================================================== */
 
 function renderStudents(){
 
@@ -1849,9 +1916,9 @@ container.appendChild(grid);
 }
 
 
-/* =========================================================
-   QR SCANNER
-========================================================= */
+/* =====================================================
+QR SCANNER
+===================================================== */
 
 function startScanner(){
 
@@ -1906,9 +1973,9 @@ false
 }
 
 
-/* =========================================================
-   PROCESS QR
-========================================================= */
+/* =====================================================
+PROCESS QR
+===================================================== */
 
 async function processQRCode(
 studentId
@@ -1918,7 +1985,6 @@ if(!studentId)return;
 
 
 try{
-
 
 const studentDoc =
 await db
@@ -1962,19 +2028,28 @@ const now =
 new Date();
 
 
+/*
+PHILIPPINES LOCAL DATE
+*/
+
 const date =
-now
-.toISOString()
-.substring(
-0,
-10
+now.toLocaleDateString(
+"en-CA",
+{
+timeZone:"Asia/Manila"
+}
 );
 
+
+/*
+PHILIPPINES LOCAL TIME
+*/
 
 const time =
 now.toLocaleTimeString(
 "en-PH",
 {
+timeZone:"Asia/Manila",
 hour:"2-digit",
 minute:"2-digit",
 second:"2-digit"
@@ -2087,9 +2162,9 @@ false
 }
 
 
-/* =========================================================
-   SCAN RESULT
-========================================================= */
+/* =====================================================
+SCAN RESULT
+===================================================== */
 
 function showScanResult(
 message,
@@ -2121,9 +2196,9 @@ ${message}
 }
 
 
-/* =========================================================
-   LOAD ATTENDANCE
-========================================================= */
+/* =====================================================
+LOAD ATTENDANCE
+===================================================== */
 
 async function loadAttendance(){
 
@@ -2189,10 +2264,11 @@ renderAttendance();
 
 const today =
 new Date()
-.toISOString()
-.substring(
-0,
-10
+.toLocaleDateString(
+"en-CA",
+{
+timeZone:"Asia/Manila"
+}
 );
 
 
@@ -2212,9 +2288,9 @@ todayCount;
 }
 
 
-/* =========================================================
-   RENDER ATTENDANCE
-========================================================= */
+/* =====================================================
+RENDER ATTENDANCE
+===================================================== */
 
 function renderAttendance(){
 
@@ -2286,39 +2362,52 @@ table.appendChild(row);
 }
 
 
-/* =========================================================
-   FIREBASE ERRORS
-========================================================= */
+/* =====================================================
+FIREBASE ERRORS
+===================================================== */
 
 function friendlyFirebaseError(error){
 
 switch(error.code){
 
 case "auth/email-already-in-use":
+
 return "That email is already registered.";
 
 case "auth/invalid-email":
+
 return "Invalid email address.";
 
 case "auth/weak-password":
+
 return "Password is too weak. Use at least 6 characters.";
 
 case "auth/user-not-found":
+
 return "Account not found.";
 
 case "auth/wrong-password":
+
 return "Incorrect password.";
 
 case "auth/invalid-credential":
+
 return "Incorrect email or password.";
 
 case "auth/too-many-requests":
-return "Too many attempts. Please try again later.";
+
+return "Too many attempts. Please wait a few minutes and try again.";
 
 case "auth/api-key-not-valid":
+
 return "Firebase API configuration is invalid.";
 
+case "auth/network-request-failed":
+
+return "Network error. Please check your internet connection.";
+
 default:
+
 return error.message ||
 "An unexpected error occurred.";
 
@@ -2327,9 +2416,9 @@ return error.message ||
 }
 
 
-/* =========================================================
-   SECURITY HELPERS
-========================================================= */
+/* =====================================================
+SECURITY HELPERS
+===================================================== */
 
 function escapeHTML(value){
 
