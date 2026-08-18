@@ -17,208 +17,307 @@
 *{box-sizing:border-box}
 
 body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#f1f5f9;
-  color:#0f172a
+margin:0;
+font-family:Arial,sans-serif;
+background:#f1f5f9;
+color:#0f172a
 }
 
 header{
-  background:#0f172a;
-  color:white;
-  padding:18px 25px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center
+background:#0f172a;
+color:white;
+padding:18px 25px;
+display:flex;
+justify-content:space-between;
+align-items:center
 }
 
-header h1{margin:0;font-size:22px}
+header h1{
+margin:0;
+font-size:22px
+}
 
 button{
-  border:0;
-  border-radius:8px;
-  padding:11px 16px;
-  cursor:pointer;
-  font-weight:bold
+border:0;
+border-radius:8px;
+padding:11px 16px;
+cursor:pointer;
+font-weight:bold
 }
 
-.btn-primary{background:#2563eb;color:white}
-.btn-success{background:#16a34a;color:white}
-.btn-danger{background:#dc2626;color:white}
-.btn-dark{background:#0f172a;color:white}
+.btn-primary{
+background:#2563eb;
+color:white
+}
+
+.btn-success{
+background:#16a34a;
+color:white
+}
+
+.btn-danger{
+background:#dc2626;
+color:white
+}
+
+.btn-dark{
+background:#0f172a;
+color:white
+}
 
 input,select{
-  width:100%;
-  padding:12px;
-  border:1px solid #cbd5e1;
-  border-radius:8px;
-  margin-top:6px;
-  margin-bottom:15px
+width:100%;
+padding:12px;
+border:1px solid #cbd5e1;
+border-radius:8px;
+margin-top:6px;
+margin-bottom:15px;
+font-size:15px
 }
 
 label{
-  font-weight:bold;
-  font-size:14px
+font-weight:bold;
+font-size:14px
 }
 
 .container{
-  max-width:1200px;
-  margin:auto;
-  padding:25px
+max-width:1200px;
+margin:auto;
+padding:25px
 }
 
 .card{
-  background:white;
-  border-radius:14px;
-  padding:22px;
-  margin-bottom:20px;
-  box-shadow:0 4px 20px rgba(0,0,0,.06)
+background:white;
+border-radius:14px;
+padding:22px;
+margin-bottom:20px;
+box-shadow:0 4px 20px rgba(0,0,0,.06)
 }
 
-.hidden{display:none!important}
+.hidden{
+display:none!important
+}
 
 .auth-box{
-  max-width:450px;
-  margin:60px auto
+max-width:450px;
+margin:60px auto
 }
 
-.auth-box h2{margin-top:0}
+.auth-box h2{
+margin-top:0
+}
 
 .tabs{
-  display:flex;
-  gap:8px;
-  margin-bottom:20px
+display:flex;
+gap:8px;
+margin-bottom:20px
 }
 
-.tabs button{flex:1}
+.tabs button{
+flex:1
+}
 
 .dashboard-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:15px
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:15px
 }
 
 .stat{
-  padding:20px;
-  border-radius:12px;
-  background:#eff6ff
+padding:20px;
+border-radius:12px;
+background:#eff6ff
 }
 
-.stat h3{margin:0 0 10px}
-.stat strong{font-size:30px}
+.stat h3{
+margin:0 0 10px
+}
+
+.stat strong{
+font-size:30px
+}
 
 .student-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-  gap:15px
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+gap:15px
 }
 
 .student-card{
-  background:white;
-  border:1px solid #e2e8f0;
-  border-radius:12px;
-  padding:18px
+background:white;
+border:1px solid #e2e8f0;
+border-radius:12px;
+padding:18px
 }
 
-.student-card h3{margin-top:0}
+.student-card h3{
+margin-top:0
+}
 
 .badge{
-  display:inline-block;
-  background:#dbeafe;
-  color:#1d4ed8;
-  padding:5px 9px;
-  border-radius:20px;
-  font-size:12px;
-  margin-right:5px
-}
-
-table{
-  width:100%;
-  border-collapse:collapse
-}
-
-th,td{
-  padding:11px;
-  border-bottom:1px solid #e2e8f0;
-  text-align:left
-}
-
-th{background:#f8fafc}
-
-.table-wrapper{overflow-x:auto}
-
-#reader{
-  width:100%;
-  max-width:500px;
-  margin:auto
-}
-
-.message{
-  padding:12px;
-  border-radius:8px;
-  margin-bottom:15px;
-  background:#fef3c7;
-  color:#92400e
-}
-
-.success-message{
-  background:#dcfce7;
-  color:#166534
-}
-
-.error-message{
-  background:#fee2e2;
-  color:#991b1b
-}
-
-.section-title{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  flex-wrap:wrap
+display:inline-block;
+background:#dbeafe;
+color:#1d4ed8;
+padding:5px 9px;
+border-radius:20px;
+font-size:12px;
+margin-right:5px
 }
 
 .role-badge{
-  display:inline-block;
-  padding:6px 12px;
-  border-radius:20px;
-  background:#e0e7ff;
-  color:#3730a3;
-  font-weight:bold
+display:inline-block;
+padding:6px 12px;
+border-radius:20px;
+background:#e0e7ff;
+color:#3730a3;
+font-weight:bold
+}
+
+table{
+width:100%;
+border-collapse:collapse
+}
+
+th,td{
+padding:11px;
+border-bottom:1px solid #e2e8f0;
+text-align:left
+}
+
+th{
+background:#f8fafc
+}
+
+.table-wrapper{
+overflow-x:auto
+}
+
+#reader{
+width:100%;
+max-width:500px;
+margin:auto
+}
+
+.message{
+padding:12px;
+border-radius:8px;
+margin-bottom:15px;
+background:#fef3c7;
+color:#92400e
+}
+
+.success-message{
+background:#dcfce7;
+color:#166534
+}
+
+.error-message{
+background:#fee2e2;
+color:#991b1b
+}
+
+.section-title{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+flex-wrap:wrap
+}
+
+/* PASSWORD */
+
+.password-box{
+position:relative;
+width:100%
+}
+
+.password-box input{
+padding-right:55px
+}
+
+.eye-button{
+position:absolute;
+right:5px;
+top:5px;
+height:42px;
+width:42px;
+padding:0;
+background:transparent;
+font-size:20px;
+display:flex;
+align-items:center;
+justify-content:center
+}
+
+.small-note{
+font-size:13px;
+color:#64748b;
+margin-top:-8px;
+margin-bottom:15px
 }
 
 @media(max-width:600px){
-  header{
-    flex-direction:column;
-    gap:12px;
-    align-items:flex-start
-  }
 
-  .container{padding:15px}
+header{
+flex-direction:column;
+gap:12px;
+align-items:flex-start
+}
+
+.container{
+padding:15px
+}
+
+.auth-box{
+margin:25px 15px
+}
+
 }
 </style>
 </head>
 
 <body>
 
+<!-- HEADER -->
+
 <header id="mainHeader" class="hidden">
-  <h1>🎓 Student QR Attendance</h1>
-  <button class="btn-danger" onclick="logout()">Logout</button>
+
+<h1>🎓 Student QR Attendance</h1>
+
+<button class="btn-danger" onclick="logout()">
+Logout
+</button>
+
 </header>
 
-<!-- AUTH -->
+
+<!-- =========================
+     AUTH SECTION
+========================= -->
 
 <div id="authSection">
 
 <div class="card auth-box">
 
 <div class="tabs">
-<button class="btn-primary" onclick="showLogin()">Login</button>
-<button class="btn-dark" onclick="showRegister()">Register</button>
+
+<button
+class="btn-primary"
+onclick="showLogin()">
+Login
+</button>
+
+<button
+class="btn-dark"
+onclick="showRegister()">
+Register
+</button>
+
 </div>
 
+
 <div id="authMessage"></div>
+
 
 <!-- LOGIN -->
 
@@ -227,16 +326,51 @@ th{background:#f8fafc}
 <h2>Account Login</h2>
 
 <label>Email</label>
-<input id="loginEmail" type="email" placeholder="Email">
+
+<input
+id="loginEmail"
+type="email"
+placeholder="your@email.com"
+autocomplete="email"
+>
+
 
 <label>Password</label>
-<input id="loginPassword" type="password" placeholder="Password">
 
-<button class="btn-primary" style="width:100%" onclick="login()">
-Login
+<div class="password-box">
+
+<input
+id="loginPassword"
+type="password"
+placeholder="Password"
+autocomplete="current-password"
+>
+
+<button
+type="button"
+class="eye-button"
+onclick="togglePassword('loginPassword','loginEye')"
+>
+
+<span id="loginEye">👁️</span>
+
 </button>
 
 </div>
+
+
+<button
+class="btn-primary"
+style="width:100%"
+onclick="login()"
+>
+
+Login
+
+</button>
+
+</div>
+
 
 <!-- REGISTER -->
 
@@ -244,42 +378,121 @@ Login
 
 <h2>Create Teacher Account</h2>
 
-<p>
-Only authorized school personnel should create an account.
+<p class="small-note">
+Registration is for authorized teachers and school administrators only.
 </p>
 
+
 <label>Full Name</label>
-<input id="registerName" type="text" placeholder="Juan Dela Cruz">
+
+<input
+id="registerName"
+type="text"
+placeholder="Juan Dela Cruz"
+>
+
 
 <label>Email</label>
-<input id="registerEmail" type="email" placeholder="teacher@email.com">
+
+<input
+id="registerEmail"
+type="email"
+placeholder="teacher@email.com"
+autocomplete="email"
+>
+
 
 <label>Phone Number</label>
-<input id="registerPhone" type="text" placeholder="+639XXXXXXXXX">
+
+<input
+id="registerPhone"
+type="tel"
+placeholder="+639XXXXXXXXX"
+>
+
 
 <label>Password</label>
-<input id="registerPassword" type="password" placeholder="Minimum 6 characters">
 
-<button class="btn-success" style="width:100%" onclick="register()">
+<div class="password-box">
+
+<input
+id="registerPassword"
+type="password"
+placeholder="Minimum 6 characters"
+autocomplete="new-password"
+>
+
+<button
+type="button"
+class="eye-button"
+onclick="togglePassword('registerPassword','registerEye')"
+>
+
+<span id="registerEye">👁️</span>
+
+</button>
+
+</div>
+
+
+<label>Confirm Password</label>
+
+<div class="password-box">
+
+<input
+id="registerConfirmPassword"
+type="password"
+placeholder="Re-enter your password"
+autocomplete="new-password"
+>
+
+<button
+type="button"
+class="eye-button"
+onclick="togglePassword('registerConfirmPassword','confirmEye')"
+>
+
+<span id="confirmEye">👁️</span>
+
+</button>
+
+</div>
+
+
+<button
+class="btn-success"
+style="width:100%"
+onclick="register()"
+>
+
 Create Account
+
 </button>
 
 </div>
 
 </div>
+
 </div>
 
 
-<!-- DASHBOARD -->
+<!-- =========================
+     DASHBOARD
+========================= -->
 
 <div id="dashboard" class="hidden">
 
 <div class="container">
 
+
+<!-- ACCOUNT -->
+
 <div class="card">
 
 <h2>
-Welcome, <span id="userName"></span> 👋
+Welcome,
+<span id="userName"></span>
+👋
 </h2>
 
 <p>
@@ -289,7 +502,10 @@ Account:
 
 <p>
 Role:
-<span id="userRole" class="role-badge"></span>
+<span
+id="userRole"
+class="role-badge">
+</span>
 </p>
 
 <p id="verificationStatus"></p>
@@ -302,39 +518,73 @@ Role:
 <div class="dashboard-grid">
 
 <div class="stat">
+
 <h3>Total Students</h3>
-<strong id="totalStudents">0</strong>
+
+<strong id="totalStudents">
+0
+</strong>
+
 </div>
 
+
 <div class="stat">
+
 <h3>Today's Attendance</h3>
-<strong id="todayAttendance">0</strong>
+
+<strong id="todayAttendance">
+0
+</strong>
+
 </div>
+
 
 <div class="stat">
+
 <h3>Grade Levels</h3>
-<strong id="gradeCount">0</strong>
-</div>
+
+<strong id="gradeCount">
+0
+</strong>
 
 </div>
 
+</div>
 
-<!-- ADD STUDENT -->
+
+<!-- REGISTER STUDENT -->
 
 <div class="card">
 
 <div class="section-title">
-<h2>➕ Register Student</h2>
+
+<h2>
+➕ Register Student
+</h2>
+
 </div>
 
-<label>Student Full Name</label>
-<input id="studentName" placeholder="Juan Dela Cruz">
 
-<label>Grade</label>
+<label>
+Student Full Name
+</label>
+
+<input
+id="studentName"
+placeholder="Juan Dela Cruz"
+>
+
+
+<label>
+Grade
+</label>
 
 <select id="studentGrade">
 
-<option value="">Select Grade</option>
+<option value="">
+Select Grade
+</option>
+
 <option>Grade 1</option>
 <option>Grade 2</option>
 <option>Grade 3</option>
@@ -350,11 +600,24 @@ Role:
 
 </select>
 
-<label>Section</label>
-<input id="studentSection" placeholder="Example: Rizal">
 
-<button class="btn-success" onclick="addStudent()">
+<label>
+Section
+</label>
+
+<input
+id="studentSection"
+placeholder="Example: Rizal"
+>
+
+
+<button
+class="btn-success"
+onclick="addStudent()"
+>
+
 Register Student + Generate QR
+
 </button>
 
 </div>
@@ -364,11 +627,13 @@ Register Student + Generate QR
 
 <div class="card">
 
-<h2>📷 Scan Student QR</h2>
+<h2>
+📷 Scan Student QR
+</h2>
 
 <p>
-I-scan ang QR ng student. Automatic na mare-record
-ang attendance date at exact time.
+I-scan ang QR ng student.
+Automatic na mare-record ang date at exact time.
 </p>
 
 <div id="reader"></div>
@@ -378,16 +643,25 @@ ang attendance date at exact time.
 </div>
 
 
-<!-- STUDENTS -->
+<!-- STUDENT GROUPS -->
 
 <div class="card">
 
 <div class="section-title">
 
-<h2>👨‍🎓 Students by Grade & Section</h2>
+<h2>
+👨‍🎓 Students by Grade & Section
+</h2>
 
-<select id="groupFilter" onchange="renderStudents()">
-<option value="ALL">All Groups</option>
+<select
+id="groupFilter"
+onchange="renderStudents()"
+>
+
+<option value="ALL">
+All Groups
+</option>
+
 </select>
 
 </div>
@@ -401,7 +675,9 @@ ang attendance date at exact time.
 
 <div class="card">
 
-<h2>🕐 Attendance Records</h2>
+<h2>
+🕐 Attendance Records
+</h2>
 
 <div class="table-wrapper">
 
@@ -410,11 +686,27 @@ ang attendance date at exact time.
 <thead>
 
 <tr>
-<th>Student</th>
-<th>Grade</th>
-<th>Section</th>
-<th>Date</th>
-<th>Time In</th>
+
+<th>
+Student
+</th>
+
+<th>
+Grade
+</th>
+
+<th>
+Section
+</th>
+
+<th>
+Date
+</th>
+
+<th>
+Time In
+</th>
+
 </tr>
 
 </thead>
@@ -428,60 +720,101 @@ ang attendance date at exact time.
 </div>
 
 </div>
+
 </div>
 
 
 <script>
 
-/* ==========================================================
+/* =========================================================
    FIREBASE CONFIG
-   ========================================================== */
+========================================================= */
 
 const firebaseConfig = {
 
-apiKey:"AIzaSyAxNFd8kjOBq0NJtWY6GCJ6gJnyEhSevtI",
+apiKey:
+"AIzaSyAxNFd8kjOBq0NJtWY6GCJ6gJnyEhSevtI",
 
-authDomain:"student-qr-gateway.firebaseapp.com",
+authDomain:
+"student-qr-gateway.firebaseapp.com",
 
-projectId:"student-qr-gateway",
+projectId:
+"student-qr-gateway",
 
-storageBucket:"student-qr-gateway.firebasestorage.app",
+storageBucket:
+"student-qr-gateway.firebasestorage.app",
 
-messagingSenderId:"199047369725",
+messagingSenderId:
+"199047369725",
 
-appId:"1:199047369725:web:d0aacaae8e9209c4d6bf94"
+appId:
+"1:199047369725:web:d0aacaae8e9209c4d6bf94"
 
 };
 
 
 firebase.initializeApp(firebaseConfig);
 
-const auth=firebase.auth();
+const auth =
+firebase.auth();
 
-const db=firebase.firestore();
-
-
-let currentUser=null;
-
-let currentRole=null;
-
-let students=[];
-
-let attendance=[];
-
-let scanner=null;
+const db =
+firebase.firestore();
 
 
-/* ==========================================================
+let currentUser = null;
+
+let currentRole = null;
+
+let students = [];
+
+let attendance = [];
+
+let scanner = null;
+
+
+/* =========================================================
+   PASSWORD SHOW / HIDE
+========================================================= */
+
+function togglePassword(inputId,eyeId){
+
+const input =
+document.getElementById(inputId);
+
+const eye =
+document.getElementById(eyeId);
+
+
+if(input.type === "password"){
+
+input.type = "text";
+
+eye.textContent = "🙈";
+
+}else{
+
+input.type = "password";
+
+eye.textContent = "👁️";
+
+}
+
+}
+
+
+/* =========================================================
    AUTH UI
-   ========================================================== */
+========================================================= */
 
 function showLogin(){
 
-document.getElementById("loginBox")
+document
+.getElementById("loginBox")
 .classList.remove("hidden");
 
-document.getElementById("registerBox")
+document
+.getElementById("registerBox")
 .classList.add("hidden");
 
 clearMessage();
@@ -491,10 +824,12 @@ clearMessage();
 
 function showRegister(){
 
-document.getElementById("loginBox")
+document
+.getElementById("loginBox")
 .classList.add("hidden");
 
-document.getElementById("registerBox")
+document
+.getElementById("registerBox")
 .classList.remove("hidden");
 
 clearMessage();
@@ -504,46 +839,74 @@ clearMessage();
 
 function showMessage(message,type=""){
 
-document.getElementById("authMessage").innerHTML=
+document
+.getElementById("authMessage")
+.innerHTML =
 
-`<div class="message ${type}">
+`
+<div class="message ${type}">
 ${escapeHTML(message)}
-</div>`;
+</div>
+`;
 
 }
 
 
 function clearMessage(){
 
-document.getElementById("authMessage").innerHTML="";
+document
+.getElementById("authMessage")
+.innerHTML = "";
 
 }
 
 
-/* ==========================================================
+/* =========================================================
    REGISTER
-   ========================================================== */
+========================================================= */
 
 async function register(){
 
-const name=document
+const name =
+document
 .getElementById("registerName")
-.value.trim();
+.value
+.trim();
 
-const email=document
+
+const email =
+document
 .getElementById("registerEmail")
-.value.trim();
+.value
+.trim();
 
-const phone=document
+
+const phone =
+document
 .getElementById("registerPhone")
-.value.trim();
+.value
+.trim();
 
-const password=document
+
+const password =
+document
 .getElementById("registerPassword")
 .value;
 
 
-if(!name||!email||!phone||!password){
+const confirmPassword =
+document
+.getElementById("registerConfirmPassword")
+.value;
+
+
+if(
+!name ||
+!email ||
+!phone ||
+!password ||
+!confirmPassword
+){
 
 showMessage(
 "Please complete all fields.",
@@ -555,7 +918,7 @@ return;
 }
 
 
-if(password.length<6){
+if(password.length < 6){
 
 showMessage(
 "Password must be at least 6 characters.",
@@ -567,26 +930,42 @@ return;
 }
 
 
+if(password !== confirmPassword){
+
+showMessage(
+"Password and Confirm Password do not match.",
+"error-message"
+);
+
+return;
+
+}
+
+
 try{
 
-const result=
-await auth.createUserWithEmailAndPassword(
+
+const result =
+await auth
+.createUserWithEmailAndPassword(
 email,
 password
 );
 
-const user=result.user;
+
+const user =
+result.user;
 
 
 /*
-Default new account role = teacher.
-
-IMPORTANT:
-The Firestore security rules must also enforce
-which accounts are allowed to have elevated roles.
+Every normal registration starts as teacher.
+Admin role should only be assigned securely
+through Firebase/Admin controls.
 */
 
-await db.collection("users")
+
+await db
+.collection("users")
 .doc(user.uid)
 .set({
 
@@ -601,29 +980,53 @@ role:"teacher",
 status:"active",
 
 createdAt:
-firebase.firestore.FieldValue.serverTimestamp()
+firebase
+.firestore
+.FieldValue
+.serverTimestamp()
 
 });
 
+
+/*
+EMAIL VERIFICATION
+*/
 
 await user.sendEmailVerification();
 
 
 showMessage(
-"Account created. Please verify your email before logging in.",
+"Account created successfully! Check your email and verify your account before logging in.",
 "success-message"
 );
 
 
 await auth.signOut();
 
-document.getElementById("registerName").value="";
 
-document.getElementById("registerEmail").value="";
+document
+.getElementById("registerName")
+.value="";
 
-document.getElementById("registerPhone").value="";
 
-document.getElementById("registerPassword").value="";
+document
+.getElementById("registerEmail")
+.value="";
+
+
+document
+.getElementById("registerPhone")
+.value="";
+
+
+document
+.getElementById("registerPassword")
+.value="";
+
+
+document
+.getElementById("registerConfirmPassword")
+.value="";
 
 
 showLogin();
@@ -643,22 +1046,26 @@ friendlyFirebaseError(error),
 }
 
 
-/* ==========================================================
+/* =========================================================
    LOGIN
-   ========================================================== */
+========================================================= */
 
 async function login(){
 
-const email=
-document.getElementById("loginEmail")
-.value.trim();
+const email =
+document
+.getElementById("loginEmail")
+.value
+.trim();
 
-const password=
-document.getElementById("loginPassword")
+
+const password =
+document
+.getElementById("loginPassword")
 .value;
 
 
-if(!email||!password){
+if(!email || !password){
 
 showMessage(
 "Enter your email and password.",
@@ -672,13 +1079,16 @@ return;
 
 try{
 
-const result=
-await auth.signInWithEmailAndPassword(
+const result =
+await auth
+.signInWithEmailAndPassword(
 email,
 password
 );
 
-const user=result.user;
+
+const user =
+result.user;
 
 
 if(!user.emailVerified){
@@ -712,17 +1122,19 @@ friendlyFirebaseError(error),
 }
 
 
-/* ==========================================================
+/* =========================================================
    AUTH STATE
-   ========================================================== */
+========================================================= */
 
-auth.onAuthStateChanged(async user=>{
+auth.onAuthStateChanged(
+async user => {
 
 if(!user){
 
 return;
 
 }
+
 
 if(!user.emailVerified){
 
@@ -732,24 +1144,28 @@ return;
 
 }
 
+
 await loadDashboard(user);
 
-});
+}
+);
 
 
-/* ==========================================================
-   DASHBOARD
-   ========================================================== */
+/* =========================================================
+   LOAD DASHBOARD
+========================================================= */
 
 async function loadDashboard(user){
 
 try{
 
-currentUser=user;
+currentUser =
+user;
 
 
-const profile=
-await db.collection("users")
+const profile =
+await db
+.collection("users")
 .doc(user.uid)
 .get();
 
@@ -757,7 +1173,7 @@ await db.collection("users")
 if(!profile.exists){
 
 showMessage(
-"Account profile not found.",
+"Account profile was not found.",
 "error-message"
 );
 
@@ -768,15 +1184,17 @@ return;
 }
 
 
-const data=profile.data();
+const data =
+profile.data();
 
 
-currentRole=data.role||"teacher";
+currentRole =
+data.role || "teacher";
 
 
 if(
-currentRole!=="teacher" &&
-currentRole!=="admin"
+currentRole !== "teacher" &&
+currentRole !== "admin"
 ){
 
 showMessage(
@@ -791,27 +1209,43 @@ return;
 }
 
 
-document.getElementById("authSection")
+document
+.getElementById("authSection")
 .classList.add("hidden");
 
-document.getElementById("dashboard")
+
+document
+.getElementById("dashboard")
 .classList.remove("hidden");
 
-document.getElementById("mainHeader")
+
+document
+.getElementById("mainHeader")
 .classList.remove("hidden");
 
 
-document.getElementById("userName")
-.textContent=data.name||user.email;
+document
+.getElementById("userName")
+.textContent =
+data.name || user.email;
 
-document.getElementById("userEmail")
-.textContent=user.email;
 
-document.getElementById("userRole")
-.textContent=currentRole.toUpperCase();
+document
+.getElementById("userEmail")
+.textContent =
+user.email;
 
-document.getElementById("verificationStatus")
-.innerHTML="🟢 Account verified";
+
+document
+.getElementById("userRole")
+.textContent =
+currentRole.toUpperCase();
+
+
+document
+.getElementById("verificationStatus")
+.innerHTML =
+"🟢 Account verified";
 
 
 await loadStudents();
@@ -826,7 +1260,8 @@ startScanner();
 console.error(error);
 
 alert(
-"Unable to load account: "+error.message
+"Unable to load account: " +
+error.message
 );
 
 }
@@ -834,9 +1269,9 @@ alert(
 }
 
 
-/* ==========================================================
+/* =========================================================
    LOGOUT
-   ========================================================== */
+========================================================= */
 
 async function logout(){
 
@@ -848,9 +1283,10 @@ await scanner.stop();
 
 }catch(e){}
 
-scanner=null;
+scanner = null;
 
 }
+
 
 await auth.signOut();
 
@@ -859,37 +1295,48 @@ location.reload();
 }
 
 
-/* ==========================================================
+/* =========================================================
    ADD STUDENT
-   ========================================================== */
+========================================================= */
 
 async function addStudent(){
 
 if(!currentUser){
 
-alert("Please login first.");
+alert(
+"Please login first."
+);
 
 return;
 
 }
 
 
-const name=
-document.getElementById("studentName")
-.value.trim();
+const name =
+document
+.getElementById("studentName")
+.value
+.trim();
 
-const grade=
-document.getElementById("studentGrade")
+
+const grade =
+document
+.getElementById("studentGrade")
 .value;
 
-const section=
-document.getElementById("studentSection")
-.value.trim();
+
+const section =
+document
+.getElementById("studentSection")
+.value
+.trim();
 
 
-if(!name||!grade||!section){
+if(!name || !grade || !section){
 
-alert("Complete all student information.");
+alert(
+"Complete all student information."
+);
 
 return;
 
@@ -898,10 +1345,15 @@ return;
 
 try{
 
-const studentRef=
-db.collection("students").doc();
 
-const studentId=studentRef.id;
+const studentRef =
+db
+.collection("students")
+.doc();
+
+
+const studentId =
+studentRef.id;
 
 
 await studentRef.set({
@@ -919,7 +1371,10 @@ ownerId:currentUser.uid,
 createdBy:currentUser.uid,
 
 createdAt:
-firebase.firestore.FieldValue.serverTimestamp()
+firebase
+.firestore
+.FieldValue
+.serverTimestamp()
 
 });
 
@@ -932,11 +1387,19 @@ section
 );
 
 
-document.getElementById("studentName").value="";
+document
+.getElementById("studentName")
+.value="";
 
-document.getElementById("studentGrade").value="";
 
-document.getElementById("studentSection").value="";
+document
+.getElementById("studentGrade")
+.value="";
+
+
+document
+.getElementById("studentSection")
+.value="";
 
 
 await loadStudents();
@@ -952,7 +1415,8 @@ alert(
 console.error(error);
 
 alert(
-"Unable to register student: "+error.message
+"Unable to register student: " +
+error.message
 );
 
 }
@@ -960,9 +1424,9 @@ alert(
 }
 
 
-/* ==========================================================
+/* =========================================================
    QR GENERATOR
-   ========================================================== */
+========================================================= */
 
 function generateStudentQR(
 studentId,
@@ -971,7 +1435,8 @@ grade,
 section
 ){
 
-const qrWindow=window.open(
+const qrWindow =
+window.open(
 "",
 "_blank",
 "width=500,height=700"
@@ -981,7 +1446,7 @@ const qrWindow=window.open(
 if(!qrWindow){
 
 alert(
-"Please allow pop-ups so the QR can be printed."
+"Please allow pop-ups to print the QR."
 );
 
 return;
@@ -1023,7 +1488,9 @@ font-weight:bold
 
 <h1>Student QR</h1>
 
-<h2>${escapeHTML(name)}</h2>
+<h2>
+${escapeHTML(name)}
+</h2>
 
 <p>
 ${escapeHTML(grade)}
@@ -1035,7 +1502,9 @@ ${escapeHTML(section)}
 
 <p>
 Student ID:
-<strong>${escapeHTML(studentId)}</strong>
+<strong>
+${escapeHTML(studentId)}
+</strong>
 </p>
 
 <button onclick="window.print()">
@@ -1068,18 +1537,23 @@ height:256
 }
 
 
-/* ==========================================================
+/* =========================================================
    LOAD STUDENTS
-   ========================================================== */
+========================================================= */
 
 async function loadStudents(){
 
 if(!currentUser)return;
 
 
-const snapshot=
-await db.collection("students")
-.where("ownerId","==",currentUser.uid)
+const snapshot =
+await db
+.collection("students")
+.where(
+"ownerId",
+"==",
+currentUser.uid
+)
 .get();
 
 
@@ -1099,8 +1573,10 @@ id:doc.id,
 });
 
 
-document.getElementById("totalStudents")
-.textContent=students.length;
+document
+.getElementById("totalStudents")
+.textContent =
+students.length;
 
 
 createGroupFilter();
@@ -1110,27 +1586,35 @@ renderStudents();
 }
 
 
-/* ==========================================================
+/* =========================================================
    GROUP FILTER
-   ========================================================== */
+========================================================= */
 
 function createGroupFilter(){
 
-const filter=
-document.getElementById("groupFilter");
+const filter =
+document
+.getElementById("groupFilter");
 
 
-filter.innerHTML=
-`<option value="ALL">All Groups</option>`;
+filter.innerHTML =
+`
+<option value="ALL">
+All Groups
+</option>
+`;
 
 
-const groups=new Set();
+const groups =
+new Set();
 
 
 students.forEach(student=>{
 
 groups.add(
-student.grade+" - "+student.section
+student.grade +
+" - " +
+student.section
 );
 
 });
@@ -1140,57 +1624,72 @@ student.grade+" - "+student.section
 .sort()
 .forEach(group=>{
 
-const option=
+const option =
 document.createElement("option");
 
-option.value=group;
 
-option.textContent=group;
+option.value =
+group;
+
+
+option.textContent =
+group;
+
 
 filter.appendChild(option);
 
 });
 
 
-document.getElementById("gradeCount")
-.textContent=
+document
+.getElementById("gradeCount")
+.textContent =
 new Set(
-students.map(s=>s.grade)
+students.map(
+s=>s.grade
+)
 ).size;
 
 }
 
 
-/* ==========================================================
+/* =========================================================
    RENDER STUDENTS
-   ========================================================== */
+========================================================= */
 
 function renderStudents(){
 
-const container=
-document.getElementById(
+const container =
+document
+.getElementById(
 "studentsContainer"
 );
 
 
-const selected=
-document.getElementById(
+const selected =
+document
+.getElementById(
 "groupFilter"
-).value;
+)
+.value;
 
 
-const filtered=
-students.filter(student=>{
+const filtered =
+students.filter(
+student=>{
 
-if(selected==="ALL")return true;
+if(selected==="ALL")
+return true;
+
 
 return(
-student.grade+
-" - "+
+student.grade +
+" - " +
 student.section
-)===selected;
+) === selected;
 
-});
+}
+);
 
 
 const groups={};
@@ -1198,17 +1697,15 @@ const groups={};
 
 filtered.forEach(student=>{
 
-const key=
-student.grade+
-" - "+
+const key =
+student.grade +
+" - " +
 student.section;
 
 
-if(!groups[key]){
-
+if(!groups[key])
 groups[key]=[];
 
-}
 
 groups[key].push(student);
 
@@ -1222,81 +1719,108 @@ Object.keys(groups)
 .sort()
 .forEach(group=>{
 
-const title=
+const title =
 document.createElement("h3");
 
-title.textContent=
-group+
-" ("+
-groups[group].length+
+
+title.textContent =
+group +
+" (" +
+groups[group].length +
 " students)";
 
 
 container.appendChild(title);
 
 
-const grid=
+const grid =
 document.createElement("div");
 
-grid.className="student-grid";
+
+grid.className =
+"student-grid";
 
 
 groups[group]
 .forEach(student=>{
 
-const card=
+const card =
 document.createElement("div");
 
-card.className="student-card";
+
+card.className =
+"student-card";
 
 
-const title=
+const title =
 document.createElement("h3");
 
-title.textContent=student.name;
+
+title.textContent =
+student.name;
+
 
 card.appendChild(title);
 
 
-const gradeBadge=
+const gradeBadge =
 document.createElement("span");
 
-gradeBadge.className="badge";
 
-gradeBadge.textContent=
+gradeBadge.className =
+"badge";
+
+
+gradeBadge.textContent =
 student.grade;
 
-card.appendChild(gradeBadge);
+
+card.appendChild(
+gradeBadge
+);
 
 
-const sectionBadge=
+const sectionBadge =
 document.createElement("span");
 
-sectionBadge.className="badge";
 
-sectionBadge.textContent=
+sectionBadge.className =
+"badge";
+
+
+sectionBadge.textContent =
 student.section;
 
-card.appendChild(sectionBadge);
+
+card.appendChild(
+sectionBadge
+);
 
 
 card.appendChild(
 document.createElement("br")
 );
 
+
 card.appendChild(
 document.createElement("br")
 );
 
 
-const qrButton=
+const qrButton =
 document.createElement("button");
 
-qrButton.className="btn-primary";
 
-qrButton.textContent="Show QR";
+qrButton.className =
+"btn-primary";
 
-qrButton.onclick=()=>{
+
+qrButton.textContent =
+"Show QR";
+
+
+qrButton.onclick =
+()=>{
 
 generateStudentQR(
 student.id,
@@ -1308,7 +1832,10 @@ student.section
 };
 
 
-card.appendChild(qrButton);
+card.appendChild(
+qrButton
+);
+
 
 grid.appendChild(card);
 
@@ -1322,23 +1849,26 @@ container.appendChild(grid);
 }
 
 
-/* ==========================================================
+/* =========================================================
    QR SCANNER
-   ========================================================== */
+========================================================= */
 
 function startScanner(){
 
 if(scanner)return;
 
 
-scanner=
-new Html5Qrcode("reader");
+scanner =
+new Html5Qrcode(
+"reader"
+);
 
 
 scanner.start(
 
 {
-facingMode:"environment"
+facingMode:
+"environment"
 },
 
 {
@@ -1348,7 +1878,9 @@ qrbox:250
 
 decodedText=>{
 
-processQRCode(decodedText);
+processQRCode(
+decodedText
+);
 
 },
 
@@ -1363,6 +1895,7 @@ console.error(
 error
 );
 
+
 showScanResult(
 "Camera permission is required to scan QR.",
 false
@@ -1373,19 +1906,23 @@ false
 }
 
 
-/* ==========================================================
+/* =========================================================
    PROCESS QR
-   ========================================================== */
+========================================================= */
 
-async function processQRCode(studentId){
+async function processQRCode(
+studentId
+){
 
 if(!studentId)return;
 
 
 try{
 
-const studentDoc=
-await db.collection("students")
+
+const studentDoc =
+await db
+.collection("students")
 .doc(studentId)
 .get();
 
@@ -1402,12 +1939,13 @@ return;
 }
 
 
-const student=
+const student =
 studentDoc.data();
 
 
 if(
-student.ownerId!==currentUser.uid
+student.ownerId !==
+currentUser.uid
 ){
 
 showScanResult(
@@ -1420,15 +1958,20 @@ return;
 }
 
 
-const now=new Date();
+const now =
+new Date();
 
 
-const date=
-now.toISOString()
-.substring(0,10);
+const date =
+now
+.toISOString()
+.substring(
+0,
+10
+);
 
 
-const time=
+const time =
 now.toLocaleTimeString(
 "en-PH",
 {
@@ -1439,23 +1982,26 @@ second:"2-digit"
 );
 
 
-const attendanceId=
-studentId+"_"+date;
+const attendanceId =
+studentId +
+"_" +
+date;
 
 
-const attendanceRef=
-db.collection("attendance")
+const attendanceRef =
+db
+.collection("attendance")
 .doc(attendanceId);
 
 
-const existing=
+const existing =
 await attendanceRef.get();
 
 
 if(existing.exists){
 
 showScanResult(
-student.name+
+student.name +
 " is already marked present today.",
 false
 );
@@ -1467,33 +2013,55 @@ return;
 
 await attendanceRef.set({
 
-studentId:studentId,
+studentId:
+studentId,
 
-studentName:student.name,
+studentName:
+student.name,
 
-grade:student.grade,
+grade:
+student.grade,
 
-section:student.section,
+section:
+student.section,
 
-date:date,
+date:
+date,
 
-timeIn:time,
+timeIn:
+time,
 
 timestamp:
-firebase.firestore.FieldValue.serverTimestamp(),
+firebase
+.firestore
+.FieldValue
+.serverTimestamp(),
 
-ownerId:currentUser.uid
+ownerId:
+currentUser.uid
 
 });
 
 
 showScanResult(
 
-`<strong>Attendance Recorded</strong><br><br>
-${escapeHTML(student.name)}<br>
-${escapeHTML(student.grade)} -
-${escapeHTML(student.section)}<br>
-Time In: ${escapeHTML(time)}`,
+`
+<strong>
+Attendance Recorded
+</strong>
+<br><br>
+
+${escapeHTML(student.name)}
+<br>
+
+${escapeHTML(student.grade)}
+-
+${escapeHTML(student.section)}
+<br>
+
+Time In:
+${escapeHTML(time)}
+`,
 
 true
 
@@ -1507,8 +2075,10 @@ await loadAttendance();
 
 console.error(error);
 
+
 showScanResult(
-"Error: "+error.message,
+"Error: " +
+error.message,
 false
 );
 
@@ -1517,39 +2087,52 @@ false
 }
 
 
-/* ==========================================================
+/* =========================================================
    SCAN RESULT
-   ========================================================== */
+========================================================= */
 
-function showScanResult(message,success){
+function showScanResult(
+message,
+success
+){
 
-const box=
-document.getElementById("scanResult");
+const box =
+document
+.getElementById(
+"scanResult"
+);
 
 
-box.innerHTML=
+box.innerHTML =
 
-`<div class="
+`
+<div class="
 message
-${success?"success-message":"error-message"}
+${success
+?"success-message"
+:"error-message"}
 ">
+
 ${message}
-</div>`;
+
+</div>
+`;
 
 }
 
 
-/* ==========================================================
+/* =========================================================
    LOAD ATTENDANCE
-   ========================================================== */
+========================================================= */
 
 async function loadAttendance(){
 
 if(!currentUser)return;
 
 
-const snapshot=
-await db.collection("attendance")
+const snapshot =
+await db
+.collection("attendance")
 .where(
 "ownerId",
 "==",
@@ -1574,55 +2157,70 @@ id:doc.id,
 });
 
 
-attendance.sort((a,b)=>{
+attendance.sort(
+(a,b)=>{
 
-const aTime=
+const aTime =
 a.timestamp &&
 a.timestamp.toMillis
-? a.timestamp.toMillis()
-:0;
+?
+a.timestamp.toMillis()
+:
+0;
 
-const bTime=
+
+const bTime =
 b.timestamp &&
 b.timestamp.toMillis
-? b.timestamp.toMillis()
-:0;
+?
+b.timestamp.toMillis()
+:
+0;
+
 
 return bTime-aTime;
 
-});
+}
+);
 
 
 renderAttendance();
 
 
-const today=
+const today =
 new Date()
 .toISOString()
-.substring(0,10);
+.substring(
+0,
+10
+);
 
 
-const todayCount=
+const todayCount =
 attendance.filter(
 a=>a.date===today
 ).length;
 
 
-document.getElementById(
+document
+.getElementById(
 "todayAttendance"
-).textContent=todayCount;
+)
+.textContent =
+todayCount;
 
 }
 
 
-/* ==========================================================
+/* =========================================================
    RENDER ATTENDANCE
-   ========================================================== */
+========================================================= */
 
 function renderAttendance(){
 
-const table=
-document.getElementById(
+const table =
+document
+.getElementById(
 "attendanceTable"
 );
 
@@ -1632,32 +2230,52 @@ table.innerHTML="";
 
 attendance.forEach(record=>{
 
-const row=
+const row =
 document.createElement("tr");
 
 
-const name=document.createElement("td");
-name.textContent=record.studentName||"";
+const name =
+document.createElement("td");
+
+name.textContent =
+record.studentName || "";
+
 row.appendChild(name);
 
 
-const grade=document.createElement("td");
-grade.textContent=record.grade||"";
+const grade =
+document.createElement("td");
+
+grade.textContent =
+record.grade || "";
+
 row.appendChild(grade);
 
 
-const section=document.createElement("td");
-section.textContent=record.section||"";
+const section =
+document.createElement("td");
+
+section.textContent =
+record.section || "";
+
 row.appendChild(section);
 
 
-const date=document.createElement("td");
-date.textContent=record.date||"";
+const date =
+document.createElement("td");
+
+date.textContent =
+record.date || "";
+
 row.appendChild(date);
 
 
-const time=document.createElement("td");
-time.textContent=record.timeIn||"";
+const time =
+document.createElement("td");
+
+time.textContent =
+record.timeIn || "";
+
 row.appendChild(time);
 
 
@@ -1668,16 +2286,74 @@ table.appendChild(row);
 }
 
 
-/* ==========================================================
-   FIREBASE ERROR TRANSLATION
-   ========================================================== */
+/* =========================================================
+   FIREBASE ERRORS
+========================================================= */
 
 function friendlyFirebaseError(error){
 
 switch(error.code){
 
-case"auth/email-already-in-use":
-return"That email is already registered.";
+case "auth/email-already-in-use":
+return "That email is already registered.";
 
-case"auth/invalid-email":
-return"Invalid
+case "auth/invalid-email":
+return "Invalid email address.";
+
+case "auth/weak-password":
+return "Password is too weak. Use at least 6 characters.";
+
+case "auth/user-not-found":
+return "Account not found.";
+
+case "auth/wrong-password":
+return "Incorrect password.";
+
+case "auth/invalid-credential":
+return "Incorrect email or password.";
+
+case "auth/too-many-requests":
+return "Too many attempts. Please try again later.";
+
+case "auth/api-key-not-valid":
+return "Firebase API configuration is invalid.";
+
+default:
+return error.message ||
+"An unexpected error occurred.";
+
+}
+
+}
+
+
+/* =========================================================
+   SECURITY HELPERS
+========================================================= */
+
+function escapeHTML(value){
+
+return String(value || "")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+
+}
+
+
+function escapeJS(value){
+
+return String(value || "")
+.replace(/\\/g,"\\\\")
+.replace(/'/g,"\\'")
+.replace(/\n/g,"\\n")
+.replace(/\r/g,"\\r");
+
+}
+
+</script>
+
+</body>
+</html>
