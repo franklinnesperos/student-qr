@@ -14,6 +14,7 @@
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
 <style>
+
 *{
     box-sizing:border-box;
 }
@@ -290,17 +291,20 @@ th{
         margin:25px 15px;
     }
 }
+
 </style>
 </head>
 
 <body>
 
 <header id="mainHeader" class="hidden">
+
     <h1>🎓 Student QR Attendance</h1>
 
     <button class="btn-danger" onclick="logout()">
         Logout
     </button>
+
 </header>
 
 
@@ -738,17 +742,23 @@ PASSWORD
 
 function togglePassword(inputId, eyeId){
 
-    const input = document.getElementById(inputId);
-    const eye = document.getElementById(eyeId);
+    const input =
+    document.getElementById(inputId);
+
+    const eye =
+    document.getElementById(eyeId);
+
 
     if(input.type === "password"){
 
         input.type = "text";
+
         eye.textContent = "🙈";
 
     }else{
 
         input.type = "password";
+
         eye.textContent = "👁️";
 
     }
@@ -765,9 +775,11 @@ function showLogin(){
     .getElementById("loginBox")
     .classList.remove("hidden");
 
+
     document
     .getElementById("registerBox")
     .classList.add("hidden");
+
 
     clearMessage();
 }
@@ -779,9 +791,11 @@ function showRegister(){
     .getElementById("loginBox")
     .classList.add("hidden");
 
+
     document
     .getElementById("registerBox")
     .classList.remove("hidden");
+
 
     clearMessage();
 }
@@ -818,27 +832,37 @@ async function register(){
     const button =
     document.getElementById("registerButton");
 
+
     const name =
-    document.getElementById("registerName")
+    document
+    .getElementById("registerName")
     .value
     .trim();
+
 
     const email =
-    document.getElementById("registerEmail")
+    document
+    .getElementById("registerEmail")
     .value
     .trim();
+
 
     const phone =
-    document.getElementById("registerPhone")
+    document
+    .getElementById("registerPhone")
     .value
     .trim();
 
+
     const password =
-    document.getElementById("registerPassword")
+    document
+    .getElementById("registerPassword")
     .value;
 
+
     const confirmPassword =
-    document.getElementById("registerConfirmPassword")
+    document
+    .getElementById("registerConfirmPassword")
     .value;
 
 
@@ -882,14 +906,12 @@ async function register(){
 
 
     button.disabled = true;
-    button.textContent = "Creating account...";
+
+    button.textContent =
+    "Creating account...";
 
 
     try{
-
-        /*
-        CREATE FIREBASE AUTH USER
-        */
 
         const result =
         await auth
@@ -898,12 +920,10 @@ async function register(){
             password
         );
 
-        const user = result.user;
 
+        const user =
+        result.user;
 
-        /*
-        CREATE FIRESTORE PROFILE
-        */
 
         await db
         .collection("users")
@@ -929,10 +949,6 @@ async function register(){
         });
 
 
-        /*
-        SEND VERIFICATION
-        */
-
         await user.sendEmailVerification();
 
 
@@ -942,22 +958,32 @@ async function register(){
         );
 
 
-        /*
-        SIGN OUT
-        */
-
         await auth.signOut();
 
 
-        /*
-        CLEAR FORM
-        */
+        document
+        .getElementById("registerName")
+        .value = "";
 
-        document.getElementById("registerName").value = "";
-        document.getElementById("registerEmail").value = "";
-        document.getElementById("registerPhone").value = "";
-        document.getElementById("registerPassword").value = "";
-        document.getElementById("registerConfirmPassword").value = "";
+
+        document
+        .getElementById("registerEmail")
+        .value = "";
+
+
+        document
+        .getElementById("registerPhone")
+        .value = "";
+
+
+        document
+        .getElementById("registerPassword")
+        .value = "";
+
+
+        document
+        .getElementById("registerConfirmPassword")
+        .value = "";
 
 
         showLogin();
@@ -973,6 +999,7 @@ async function register(){
 
         console.error(error);
 
+
         showMessage(
             friendlyFirebaseError(error),
             "error-message"
@@ -981,7 +1008,9 @@ async function register(){
     }finally{
 
         button.disabled = false;
-        button.textContent = "Create Account";
+
+        button.textContent =
+        "Create Account";
 
     }
 }
@@ -996,11 +1025,13 @@ async function login(){
     const button =
     document.getElementById("loginButton");
 
+
     const email =
     document
     .getElementById("loginEmail")
     .value
     .trim();
+
 
     const password =
     document
@@ -1020,7 +1051,9 @@ async function login(){
 
 
     button.disabled = true;
-    button.textContent = "Checking...";
+
+    button.textContent =
+    "Checking...";
 
 
     try{
@@ -1032,12 +1065,10 @@ async function login(){
             password
         );
 
-        const user = result.user;
 
+        const user =
+        result.user;
 
-        /*
-        FORCE REFRESH AUTH USER
-        */
 
         await user.reload();
 
@@ -1046,10 +1077,6 @@ async function login(){
         auth.currentUser;
 
 
-        /*
-        EMAIL VERIFICATION
-        */
-
         if(!refreshedUser.emailVerified){
 
             showMessage(
@@ -1057,18 +1084,18 @@ async function login(){
                 "error-message"
             );
 
+
             await auth.signOut();
 
+
             button.disabled = false;
-            button.textContent = "Login";
+
+            button.textContent =
+            "Login";
 
             return;
         }
 
-
-        /*
-        EMAIL VERIFIED
-        */
 
         showMessage(
             "Email verified successfully. Loading dashboard...",
@@ -1076,12 +1103,15 @@ async function login(){
         );
 
 
-        await loadDashboard(refreshedUser);
+        await loadDashboard(
+            refreshedUser
+        );
 
 
     }catch(error){
 
         console.error(error);
+
 
         showMessage(
             friendlyFirebaseError(error),
@@ -1091,7 +1121,9 @@ async function login(){
     }finally{
 
         button.disabled = false;
-        button.textContent = "Login";
+
+        button.textContent =
+        "Login";
 
     }
 }
@@ -1101,7 +1133,8 @@ async function login(){
 AUTH STATE
 ===================================================== */
 
-auth.onAuthStateChanged(async user => {
+auth.onAuthStateChanged(
+async user => {
 
     if(!user){
 
@@ -1109,22 +1142,16 @@ auth.onAuthStateChanged(async user => {
     }
 
 
-    /*
-    Do not automatically load an unverified account.
-    */
-
     if(!user.emailVerified){
 
         return;
     }
 
 
-    /*
-    Avoid duplicate dashboard loading.
-    */
-
-    if(currentUser &&
-       currentUser.uid === user.uid){
+    if(
+        currentUser &&
+        currentUser.uid === user.uid
+    ){
 
         return;
     }
@@ -1152,10 +1179,6 @@ async function loadDashboard(user){
         currentUser = user;
 
 
-        /*
-        GET USER PROFILE
-        */
-
         const profile =
         await db
         .collection("users")
@@ -1170,9 +1193,12 @@ async function loadDashboard(user){
                 "error-message"
             );
 
+
             currentUser = null;
 
+
             await auth.signOut();
+
 
             return;
         }
@@ -1196,17 +1222,16 @@ async function loadDashboard(user){
                 "error-message"
             );
 
+
             currentUser = null;
 
+
             await auth.signOut();
+
 
             return;
         }
 
-
-        /*
-        SHOW DASHBOARD
-        */
 
         document
         .getElementById("authSection")
@@ -1247,13 +1272,11 @@ async function loadDashboard(user){
         "🟢 Email verified";
 
 
-        /*
-        LOAD DATA
-        */
-
         await loadStudents();
 
+
         await loadAttendance();
+
 
         startScanner();
 
@@ -1298,9 +1321,11 @@ async function logout(){
 
 
     currentUser = null;
+
     currentRole = null;
 
     students = [];
+
     attendance = [];
 
 
@@ -1326,7 +1351,9 @@ async function addStudent(){
 
 
     const button =
-    document.getElementById("studentButton");
+    document.getElementById(
+        "studentButton"
+    );
 
 
     const name =
@@ -1349,7 +1376,11 @@ async function addStudent(){
     .trim();
 
 
-    if(!name || !grade || !section){
+    if(
+        !name ||
+        !grade ||
+        !section
+    ){
 
         alert(
             "Complete all student information."
@@ -1360,7 +1391,9 @@ async function addStudent(){
 
 
     button.disabled = true;
-    button.textContent = "Saving student...";
+
+    button.textContent =
+    "Saving student...";
 
 
     try{
@@ -1374,11 +1407,6 @@ async function addStudent(){
         const studentId =
         studentRef.id;
 
-
-        /*
-        IMPORTANT:
-        ownerId MUST be the logged-in Firebase UID.
-        */
 
         const studentData = {
 
@@ -1626,6 +1654,7 @@ async function loadStudents(){
 
         createGroupFilter();
 
+
         renderStudents();
 
 
@@ -1637,12 +1666,10 @@ async function loadStudents(){
         );
 
 
-        /*
-        Don't crash dashboard.
-        */
-
         document
-        .getElementById("studentsContainer")
+        .getElementById(
+            "studentsContainer"
+        )
         .innerHTML =
 
         `
@@ -1698,7 +1725,9 @@ function createGroupFilter(){
     .forEach(group => {
 
         const option =
-        document.createElement("option");
+        document.createElement(
+            "option"
+        );
 
 
         option.value = group;
@@ -1730,18 +1759,15 @@ RENDER STUDENTS
 function renderStudents(){
 
     const container =
-    document
-    .getElementById(
+    document.getElementById(
         "studentsContainer"
     );
 
 
     const selected =
-    document
-    .getElementById(
+    document.getElementById(
         "groupFilter"
-    )
-    .value;
+    ).value;
 
 
     const filtered =
@@ -1926,7 +1952,10 @@ QR SCANNER
 
 function startScanner(){
 
-    if(scanner || scannerStarting){
+    if(
+        scanner ||
+        scannerStarting
+    ){
 
         return;
     }
@@ -1999,6 +2028,7 @@ PROCESS QR
 
 let processingQR = false;
 
+
 async function processQRCode(studentId){
 
     if(
@@ -2064,7 +2094,8 @@ async function processQRCode(studentId){
         PHILIPPINES DATE
         */
 
-        const now = new Date();
+        const now =
+        new Date();
 
 
         const date =
@@ -2094,10 +2125,54 @@ async function processQRCode(studentId){
 
 
         /*
+        CHECK IF ALREADY PRESENT TODAY
+
+        IMPORTANT:
+        We use a query instead of directly
+        reading a document that may not exist.
+        */
+
+        const existingSnapshot =
+        await db
+        .collection("attendance")
+        .where(
+            "ownerId",
+            "==",
+            currentUser.uid
+        )
+        .where(
+            "studentId",
+            "==",
+            studentId
+        )
+        .where(
+            "date",
+            "==",
+            date
+        )
+        .limit(1)
+        .get();
+
+
+        if(!existingSnapshot.empty){
+
+            showScanResult(
+
+                student.name +
+                " is already marked present today.",
+
+                false
+
+            );
+
+            return;
+        }
+
+
+        /*
         UNIQUE ATTENDANCE ID
 
-        Includes owner UID so different
-        teachers cannot collide.
+        Teacher UID + Student ID + Date
         */
 
         const attendanceId =
@@ -2112,25 +2187,6 @@ async function processQRCode(studentId){
         db
         .collection("attendance")
         .doc(attendanceId);
-
-
-        const existing =
-        await attendanceRef.get();
-
-
-        if(existing.exists){
-
-            showScanResult(
-
-                student.name +
-                " is already marked present today.",
-
-                false
-
-            );
-
-            return;
-        }
 
 
         /*
@@ -2172,6 +2228,10 @@ async function processQRCode(studentId){
         });
 
 
+        /*
+        SUCCESS MESSAGE
+        */
+
         showScanResult(
 
             `
@@ -2197,6 +2257,10 @@ async function processQRCode(studentId){
         );
 
 
+        /*
+        REFRESH ATTENDANCE TABLE
+        */
+
         await loadAttendance();
 
 
@@ -2220,8 +2284,8 @@ async function processQRCode(studentId){
     }finally{
 
         /*
-        Small delay prevents the same
-        QR from being processed repeatedly.
+        Prevent the same QR from being
+        processed repeatedly.
         */
 
         setTimeout(() => {
@@ -2244,8 +2308,7 @@ function showScanResult(
 ){
 
     const box =
-    document
-    .getElementById(
+    document.getElementById(
         "scanResult"
     );
 
@@ -2371,12 +2434,6 @@ async function loadAttendance(){
         );
 
 
-        /*
-        Keep dashboard working even
-        if old attendance data causes
-        a permission problem.
-        */
-
         document
         .getElementById(
             "attendanceTable"
@@ -2402,8 +2459,7 @@ RENDER ATTENDANCE
 function renderAttendance(){
 
     const table =
-    document
-    .getElementById(
+    document.getElementById(
         "attendanceTable"
     );
 
@@ -2483,37 +2539,59 @@ function friendlyFirebaseError(error){
     switch(error.code){
 
         case "auth/email-already-in-use":
+
             return "That email is already registered.";
 
+
         case "auth/invalid-email":
+
             return "Invalid email address.";
 
+
         case "auth/weak-password":
+
             return "Password is too weak. Use at least 6 characters.";
 
+
         case "auth/user-not-found":
+
             return "Account not found.";
 
+
         case "auth/wrong-password":
+
             return "Incorrect password.";
 
+
         case "auth/invalid-credential":
+
             return "Incorrect email or password.";
 
+
         case "auth/too-many-requests":
+
             return "Too many attempts. Please wait a few minutes and try again.";
 
+
         case "auth/api-key-not-valid":
+
             return "Firebase API configuration is invalid.";
 
+
         case "auth/network-request-failed":
+
             return "Network error. Please check your internet connection.";
 
+
         case "permission-denied":
+
             return "Firestore permission denied. Please check the Firestore Rules.";
 
+
         case "failed-precondition":
+
             return "Firestore request failed because a required condition is not ready.";
+
 
         default:
 
@@ -2521,7 +2599,9 @@ function friendlyFirebaseError(error){
                 error.message &&
                 error.message
                 .toLowerCase()
-                .includes("missing or insufficient permissions")
+                .includes(
+                    "missing or insufficient permissions"
+                )
             ){
 
                 return "Firestore permission denied. The Firestore Rules are blocking this operation.";
