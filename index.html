@@ -14,7 +14,6 @@
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
 <style>
-
 *{
     box-sizing:border-box;
 }
@@ -70,6 +69,11 @@ button:disabled{
 
 .btn-dark{
     background:#0f172a;
+    color:white;
+}
+
+.btn-secondary{
+    background:#64748b;
     color:white;
 }
 
@@ -275,6 +279,45 @@ th{
     color:#64748b;
 }
 
+.export-controls{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:12px;
+    align-items:end;
+}
+
+.export-controls input,
+.export-controls select{
+    margin-bottom:0;
+}
+
+.export-button-row{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-top:15px;
+}
+
+.summary-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:12px;
+    margin-top:15px;
+}
+
+.summary-box{
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    border-radius:10px;
+    padding:15px;
+}
+
+.summary-box strong{
+    display:block;
+    font-size:24px;
+    margin-top:5px;
+}
+
 @media(max-width:600px){
 
     header{
@@ -290,8 +333,11 @@ th{
     .auth-box{
         margin:25px 15px;
     }
-}
 
+    .export-controls{
+        grid-template-columns:1fr;
+    }
+}
 </style>
 </head>
 
@@ -657,7 +703,149 @@ All Groups
 </div>
 
 
-<!-- ATTENDANCE -->
+<!-- =====================================================
+ATTENDANCE EXPORT
+===================================================== -->
+
+<div class="card">
+
+<h2>📥 Attendance Export</h2>
+
+<p class="small-note">
+Piliin ang date at optional Grade/Section bago i-download ang attendance.
+</p>
+
+<div class="export-controls">
+
+<div>
+
+<label>Date</label>
+
+<input
+id="exportDate"
+type="date"
+>
+
+</div>
+
+<div>
+
+<label>Grade</label>
+
+<select
+id="exportGrade"
+onchange="updateExportSections()">
+
+<option value="ALL">
+All Grades
+</option>
+
+<option>Grade 1</option>
+<option>Grade 2</option>
+<option>Grade 3</option>
+<option>Grade 4</option>
+<option>Grade 5</option>
+<option>Grade 6</option>
+<option>Grade 7</option>
+<option>Grade 8</option>
+<option>Grade 9</option>
+<option>Grade 10</option>
+<option>Grade 11</option>
+<option>Grade 12</option>
+
+</select>
+
+</div>
+
+<div>
+
+<label>Section</label>
+
+<select id="exportSection">
+
+<option value="ALL">
+All Sections
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+<div class="export-button-row">
+
+<button
+class="btn-primary"
+onclick="previewExport()">
+
+🔎 Preview
+
+</button>
+
+<button
+class="btn-success"
+onclick="downloadCSV()">
+
+📥 Download CSV
+
+</button>
+
+<button
+class="btn-dark"
+onclick="printAttendance()">
+
+🖨️ Print
+
+</button>
+
+</div>
+
+<div class="summary-grid">
+
+<div class="summary-box">
+
+Present
+
+<strong id="exportPresent">
+0
+</strong>
+
+</div>
+
+<div class="summary-box">
+
+Students
+
+<strong id="exportStudents">
+0
+</strong>
+
+</div>
+
+<div class="summary-box">
+
+Attendance %
+
+<strong id="exportPercentage">
+0%
+</strong>
+
+</div>
+
+</div>
+
+<div
+id="exportPreview"
+style="margin-top:20px">
+</div>
+
+</div>
+
+
+<!-- =====================================================
+ATTENDANCE RECORDS
+===================================================== -->
 
 <div class="card">
 
@@ -734,13 +922,14 @@ let attendance = [];
 
 let scanner = null;
 let scannerStarting = false;
+let processingQR = false;
 
 
 /* =====================================================
 PASSWORD
 ===================================================== */
 
-function togglePassword(inputId, eyeId){
+function togglePassword(inputId,eyeId){
 
     const input =
     document.getElementById(inputId);
@@ -748,17 +937,14 @@ function togglePassword(inputId, eyeId){
     const eye =
     document.getElementById(eyeId);
 
-
     if(input.type === "password"){
 
         input.type = "text";
-
         eye.textContent = "🙈";
 
     }else{
 
         input.type = "password";
-
         eye.textContent = "👁️";
 
     }
@@ -775,11 +961,9 @@ function showLogin(){
     .getElementById("loginBox")
     .classList.remove("hidden");
 
-
     document
     .getElementById("registerBox")
     .classList.add("hidden");
-
 
     clearMessage();
 }
@@ -791,11 +975,9 @@ function showRegister(){
     .getElementById("loginBox")
     .classList.add("hidden");
 
-
     document
     .getElementById("registerBox")
     .classList.remove("hidden");
-
 
     clearMessage();
 }
@@ -832,37 +1014,27 @@ async function register(){
     const button =
     document.getElementById("registerButton");
 
-
     const name =
-    document
-    .getElementById("registerName")
+    document.getElementById("registerName")
     .value
     .trim();
-
 
     const email =
-    document
-    .getElementById("registerEmail")
+    document.getElementById("registerEmail")
     .value
     .trim();
-
 
     const phone =
-    document
-    .getElementById("registerPhone")
+    document.getElementById("registerPhone")
     .value
     .trim();
 
-
     const password =
-    document
-    .getElementById("registerPassword")
+    document.getElementById("registerPassword")
     .value;
 
-
     const confirmPassword =
-    document
-    .getElementById("registerConfirmPassword")
+    document.getElementById("registerConfirmPassword")
     .value;
 
 
@@ -906,9 +1078,7 @@ async function register(){
 
 
     button.disabled = true;
-
-    button.textContent =
-    "Creating account...";
+    button.textContent = "Creating account...";
 
 
     try{
@@ -920,9 +1090,7 @@ async function register(){
             password
         );
 
-
-        const user =
-        result.user;
+        const user = result.user;
 
 
         await db
@@ -931,13 +1099,9 @@ async function register(){
         .set({
 
             name:name,
-
             email:email,
-
             phone:phone,
-
             role:"teacher",
-
             status:"active",
 
             createdAt:
@@ -961,29 +1125,11 @@ async function register(){
         await auth.signOut();
 
 
-        document
-        .getElementById("registerName")
-        .value = "";
-
-
-        document
-        .getElementById("registerEmail")
-        .value = "";
-
-
-        document
-        .getElementById("registerPhone")
-        .value = "";
-
-
-        document
-        .getElementById("registerPassword")
-        .value = "";
-
-
-        document
-        .getElementById("registerConfirmPassword")
-        .value = "";
+        document.getElementById("registerName").value = "";
+        document.getElementById("registerEmail").value = "";
+        document.getElementById("registerPhone").value = "";
+        document.getElementById("registerPassword").value = "";
+        document.getElementById("registerConfirmPassword").value = "";
 
 
         showLogin();
@@ -999,7 +1145,6 @@ async function register(){
 
         console.error(error);
 
-
         showMessage(
             friendlyFirebaseError(error),
             "error-message"
@@ -1008,9 +1153,7 @@ async function register(){
     }finally{
 
         button.disabled = false;
-
-        button.textContent =
-        "Create Account";
+        button.textContent = "Create Account";
 
     }
 }
@@ -1025,13 +1168,11 @@ async function login(){
     const button =
     document.getElementById("loginButton");
 
-
     const email =
     document
     .getElementById("loginEmail")
     .value
     .trim();
-
 
     const password =
     document
@@ -1051,9 +1192,7 @@ async function login(){
 
 
     button.disabled = true;
-
-    button.textContent =
-    "Checking...";
+    button.textContent = "Checking...";
 
 
     try{
@@ -1065,9 +1204,7 @@ async function login(){
             password
         );
 
-
-        const user =
-        result.user;
+        const user = result.user;
 
 
         await user.reload();
@@ -1084,14 +1221,10 @@ async function login(){
                 "error-message"
             );
 
-
             await auth.signOut();
 
-
             button.disabled = false;
-
-            button.textContent =
-            "Login";
+            button.textContent = "Login";
 
             return;
         }
@@ -1103,15 +1236,12 @@ async function login(){
         );
 
 
-        await loadDashboard(
-            refreshedUser
-        );
+        await loadDashboard(refreshedUser);
 
 
     }catch(error){
 
         console.error(error);
-
 
         showMessage(
             friendlyFirebaseError(error),
@@ -1121,9 +1251,7 @@ async function login(){
     }finally{
 
         button.disabled = false;
-
-        button.textContent =
-        "Login";
+        button.textContent = "Login";
 
     }
 }
@@ -1133,17 +1261,14 @@ async function login(){
 AUTH STATE
 ===================================================== */
 
-auth.onAuthStateChanged(
-async user => {
+auth.onAuthStateChanged(async user => {
 
     if(!user){
-
         return;
     }
 
 
     if(!user.emailVerified){
-
         return;
     }
 
@@ -1152,7 +1277,6 @@ async user => {
         currentUser &&
         currentUser.uid === user.uid
     ){
-
         return;
     }
 
@@ -1169,7 +1293,6 @@ LOAD DASHBOARD
 async function loadDashboard(user){
 
     if(!user){
-
         return;
     }
 
@@ -1189,16 +1312,13 @@ async function loadDashboard(user){
         if(!profile.exists){
 
             showMessage(
-                "Account profile was not found. This Firebase Auth account does not have a matching Firestore user profile.",
+                "Account profile was not found.",
                 "error-message"
             );
 
-
             currentUser = null;
 
-
             await auth.signOut();
-
 
             return;
         }
@@ -1222,12 +1342,9 @@ async function loadDashboard(user){
                 "error-message"
             );
 
-
             currentUser = null;
 
-
             await auth.signOut();
-
 
             return;
         }
@@ -1272,11 +1389,12 @@ async function loadDashboard(user){
         "🟢 Email verified";
 
 
+        setDefaultExportDate();
+
+
         await loadStudents();
 
-
         await loadAttendance();
-
 
         startScanner();
 
@@ -1321,11 +1439,9 @@ async function logout(){
 
 
     currentUser = null;
-
     currentRole = null;
 
     students = [];
-
     attendance = [];
 
 
@@ -1351,9 +1467,7 @@ async function addStudent(){
 
 
     const button =
-    document.getElementById(
-        "studentButton"
-    );
+    document.getElementById("studentButton");
 
 
     const name =
@@ -1376,11 +1490,7 @@ async function addStudent(){
     .trim();
 
 
-    if(
-        !name ||
-        !grade ||
-        !section
-    ){
+    if(!name || !grade || !section){
 
         alert(
             "Complete all student information."
@@ -1391,9 +1501,7 @@ async function addStudent(){
 
 
     button.disabled = true;
-
-    button.textContent =
-    "Saving student...";
+    button.textContent = "Saving student...";
 
 
     try{
@@ -1654,8 +1762,9 @@ async function loadStudents(){
 
         createGroupFilter();
 
-
         renderStudents();
+
+        updateExportSections();
 
 
     }catch(error){
@@ -1667,9 +1776,7 @@ async function loadStudents(){
 
 
         document
-        .getElementById(
-            "studentsContainer"
-        )
+        .getElementById("studentsContainer")
         .innerHTML =
 
         `
@@ -1725,9 +1832,7 @@ function createGroupFilter(){
     .forEach(group => {
 
         const option =
-        document.createElement(
-            "option"
-        );
+        document.createElement("option");
 
 
         option.value = group;
@@ -1759,15 +1864,18 @@ RENDER STUDENTS
 function renderStudents(){
 
     const container =
-    document.getElementById(
+    document
+    .getElementById(
         "studentsContainer"
     );
 
 
     const selected =
-    document.getElementById(
+    document
+    .getElementById(
         "groupFilter"
-    ).value;
+    )
+    .value;
 
 
     const filtered =
@@ -1952,10 +2060,7 @@ QR SCANNER
 
 function startScanner(){
 
-    if(
-        scanner ||
-        scannerStarting
-    ){
+    if(scanner || scannerStarting){
 
         return;
     }
@@ -1986,11 +2091,6 @@ function startScanner(){
         },
 
         errorMessage => {
-
-            /*
-            Ignore normal scanner
-            frame errors.
-            */
 
         }
 
@@ -2026,9 +2126,6 @@ function startScanner(){
 PROCESS QR
 ===================================================== */
 
-let processingQR = false;
-
-
 async function processQRCode(studentId){
 
     if(
@@ -2045,10 +2142,6 @@ async function processQRCode(studentId){
 
 
     try{
-
-        /*
-        GET STUDENT
-        */
 
         const studentDoc =
         await db
@@ -2072,10 +2165,6 @@ async function processQRCode(studentId){
         studentDoc.data();
 
 
-        /*
-        CHECK OWNER
-        */
-
         if(
             student.ownerId !==
             currentUser.uid
@@ -2090,12 +2179,7 @@ async function processQRCode(studentId){
         }
 
 
-        /*
-        PHILIPPINES DATE
-        */
-
-        const now =
-        new Date();
+        const now = new Date();
 
 
         const date =
@@ -2106,10 +2190,6 @@ async function processQRCode(studentId){
             }
         );
 
-
-        /*
-        PHILIPPINES TIME
-        */
 
         const time =
         now.toLocaleTimeString(
@@ -2123,57 +2203,6 @@ async function processQRCode(studentId){
             }
         );
 
-
-        /*
-        CHECK IF ALREADY PRESENT TODAY
-
-        IMPORTANT:
-        We use a query instead of directly
-        reading a document that may not exist.
-        */
-
-        const existingSnapshot =
-        await db
-        .collection("attendance")
-        .where(
-            "ownerId",
-            "==",
-            currentUser.uid
-        )
-        .where(
-            "studentId",
-            "==",
-            studentId
-        )
-        .where(
-            "date",
-            "==",
-            date
-        )
-        .limit(1)
-        .get();
-
-
-        if(!existingSnapshot.empty){
-
-            showScanResult(
-
-                student.name +
-                " is already marked present today.",
-
-                false
-
-            );
-
-            return;
-        }
-
-
-        /*
-        UNIQUE ATTENDANCE ID
-
-        Teacher UID + Student ID + Date
-        */
 
         const attendanceId =
         currentUser.uid +
@@ -2189,9 +2218,24 @@ async function processQRCode(studentId){
         .doc(attendanceId);
 
 
-        /*
-        CREATE ATTENDANCE
-        */
+        const existing =
+        await attendanceRef.get();
+
+
+        if(existing.exists){
+
+            showScanResult(
+
+                student.name +
+                " is already marked present today.",
+
+                false
+
+            );
+
+            return;
+        }
+
 
         await attendanceRef.set({
 
@@ -2228,10 +2272,6 @@ async function processQRCode(studentId){
         });
 
 
-        /*
-        SUCCESS MESSAGE
-        */
-
         showScanResult(
 
             `
@@ -2257,10 +2297,6 @@ async function processQRCode(studentId){
         );
 
 
-        /*
-        REFRESH ATTENDANCE TABLE
-        */
-
         await loadAttendance();
 
 
@@ -2283,11 +2319,6 @@ async function processQRCode(studentId){
 
     }finally{
 
-        /*
-        Prevent the same QR from being
-        processed repeatedly.
-        */
-
         setTimeout(() => {
 
             processingQR = false;
@@ -2308,7 +2339,8 @@ function showScanResult(
 ){
 
     const box =
-    document.getElementById(
+    document
+    .getElementById(
         "scanResult"
     );
 
@@ -2426,6 +2458,9 @@ async function loadAttendance(){
         todayCount;
 
 
+        previewExport();
+
+
     }catch(error){
 
         console.error(
@@ -2459,12 +2494,28 @@ RENDER ATTENDANCE
 function renderAttendance(){
 
     const table =
-    document.getElementById(
+    document
+    .getElementById(
         "attendanceTable"
     );
 
 
     table.innerHTML = "";
+
+
+    if(attendance.length === 0){
+
+        table.innerHTML =
+        `
+        <tr>
+        <td colspan="5">
+        No attendance records yet.
+        </td>
+        </tr>
+        `;
+
+        return;
+    }
 
 
     attendance.forEach(record => {
@@ -2525,6 +2576,823 @@ function renderAttendance(){
 
 
 /* =====================================================
+EXPORT DATE
+===================================================== */
+
+function getManilaDate(){
+
+    return new Date()
+    .toLocaleDateString(
+        "en-CA",
+        {
+            timeZone:"Asia/Manila"
+        }
+    );
+}
+
+
+function setDefaultExportDate(){
+
+    const dateInput =
+    document.getElementById(
+        "exportDate"
+    );
+
+
+    if(
+        dateInput &&
+        !dateInput.value
+    ){
+
+        dateInput.value =
+        getManilaDate();
+
+    }
+}
+
+
+/* =====================================================
+EXPORT SECTION FILTER
+===================================================== */
+
+function updateExportSections(){
+
+    const grade =
+    document
+    .getElementById("exportGrade")
+    .value;
+
+
+    const sectionSelect =
+    document
+    .getElementById("exportSection");
+
+
+    const sections =
+    new Set();
+
+
+    students.forEach(student => {
+
+        if(
+            grade === "ALL" ||
+            student.grade === grade
+        ){
+
+            if(student.section){
+
+                sections.add(
+                    student.section
+                );
+
+            }
+
+        }
+
+    });
+
+
+    sectionSelect.innerHTML =
+
+    `
+    <option value="ALL">
+    All Sections
+    </option>
+    `;
+
+
+    [...sections]
+    .sort()
+    .forEach(section => {
+
+        const option =
+        document.createElement("option");
+
+
+        option.value = section;
+
+        option.textContent = section;
+
+
+        sectionSelect.appendChild(option);
+
+    });
+}
+
+
+/* =====================================================
+GET EXPORT DATA
+===================================================== */
+
+function getFilteredExportData(){
+
+    const date =
+    document
+    .getElementById("exportDate")
+    .value;
+
+
+    const grade =
+    document
+    .getElementById("exportGrade")
+    .value;
+
+
+    const section =
+    document
+    .getElementById("exportSection")
+    .value;
+
+
+    let filtered =
+    attendance.filter(record => {
+
+        if(date && record.date !== date){
+
+            return false;
+        }
+
+
+        if(
+            grade !== "ALL" &&
+            record.grade !== grade
+        ){
+
+            return false;
+        }
+
+
+        if(
+            section !== "ALL" &&
+            record.section !== section
+        ){
+
+            return false;
+        }
+
+
+        return true;
+
+    });
+
+
+    filtered.sort((a,b) => {
+
+        const nameA =
+        String(
+            a.studentName || ""
+        ).toLowerCase();
+
+
+        const nameB =
+        String(
+            b.studentName || ""
+        ).toLowerCase();
+
+
+        return nameA.localeCompare(
+            nameB
+        );
+
+    });
+
+
+    return filtered;
+}
+
+
+/* =====================================================
+PREVIEW EXPORT
+===================================================== */
+
+function previewExport(){
+
+    if(
+        !document.getElementById(
+            "exportDate"
+        )
+    ){
+
+        return;
+    }
+
+
+    const date =
+    document
+    .getElementById("exportDate")
+    .value;
+
+
+    const grade =
+    document
+    .getElementById("exportGrade")
+    .value;
+
+
+    const section =
+    document
+    .getElementById("exportSection")
+    .value;
+
+
+    const filtered =
+    getFilteredExportData();
+
+
+    document
+    .getElementById("exportPresent")
+    .textContent =
+    filtered.length;
+
+
+    let possibleStudents =
+    students.filter(student => {
+
+        if(
+            grade !== "ALL" &&
+            student.grade !== grade
+        ){
+
+            return false;
+        }
+
+
+        if(
+            section !== "ALL" &&
+            student.section !== section
+        ){
+
+            return false;
+        }
+
+
+        return true;
+
+    });
+
+
+    document
+    .getElementById("exportStudents")
+    .textContent =
+    possibleStudents.length;
+
+
+    const percentage =
+    possibleStudents.length > 0
+    ?
+    (
+        filtered.length /
+        possibleStudents.length *
+        100
+    ).toFixed(1)
+    :
+    "0.0";
+
+
+    document
+    .getElementById("exportPercentage")
+    .textContent =
+    percentage + "%";
+
+
+    const preview =
+    document
+    .getElementById(
+        "exportPreview"
+    );
+
+
+    if(filtered.length === 0){
+
+        preview.innerHTML =
+
+        `
+        <div class="message">
+        No attendance records found for
+        ${escapeHTML(date || "the selected date")}.
+        </div>
+        `;
+
+        return;
+    }
+
+
+    let html = `
+
+    <div class="table-wrapper">
+
+    <table>
+
+    <thead>
+
+    <tr>
+    <th>#</th>
+    <th>Student</th>
+    <th>Grade</th>
+    <th>Section</th>
+    <th>Date</th>
+    <th>Time In</th>
+    </tr>
+
+    </thead>
+
+    <tbody>
+    `;
+
+
+    filtered.forEach(
+        (record,index) => {
+
+            html += `
+
+            <tr>
+
+            <td>
+            ${index + 1}
+            </td>
+
+            <td>
+            ${escapeHTML(
+                record.studentName
+            )}
+            </td>
+
+            <td>
+            ${escapeHTML(
+                record.grade
+            )}
+            </td>
+
+            <td>
+            ${escapeHTML(
+                record.section
+            )}
+            </td>
+
+            <td>
+            ${escapeHTML(
+                record.date
+            )}
+            </td>
+
+            <td>
+            ${escapeHTML(
+                record.timeIn
+            )}
+            </td>
+
+            </tr>
+
+            `;
+
+        }
+    );
+
+
+    html += `
+
+    </tbody>
+
+    </table>
+
+    </div>
+
+    `;
+
+
+    preview.innerHTML = html;
+}
+
+
+/* =====================================================
+DOWNLOAD CSV
+===================================================== */
+
+function downloadCSV(){
+
+    const filtered =
+    getFilteredExportData();
+
+
+    if(filtered.length === 0){
+
+        alert(
+            "No attendance records found for the selected filters."
+        );
+
+        return;
+    }
+
+
+    const date =
+    document
+    .getElementById("exportDate")
+    .value ||
+    getManilaDate();
+
+
+    const grade =
+    document
+    .getElementById("exportGrade")
+    .value;
+
+
+    const section =
+    document
+    .getElementById("exportSection")
+    .value;
+
+
+    const rows = [];
+
+
+    rows.push([
+        "Student",
+        "Grade",
+        "Section",
+        "Date",
+        "Time In"
+    ]);
+
+
+    filtered.forEach(record => {
+
+        rows.push([
+
+            record.studentName || "",
+
+            record.grade || "",
+
+            record.section || "",
+
+            record.date || "",
+
+            record.timeIn || ""
+
+        ]);
+
+    });
+
+
+    const csv =
+    rows
+    .map(row =>
+        row
+        .map(value =>
+            csvEscape(value)
+        )
+        .join(",")
+    )
+    .join("\r\n");
+
+
+    const blob =
+    new Blob(
+        ["\uFEFF" + csv],
+        {
+            type:"text/csv;charset=utf-8;"
+        }
+    );
+
+
+    const url =
+    URL.createObjectURL(blob);
+
+
+    const link =
+    document.createElement("a");
+
+
+    link.href = url;
+
+
+    let filename =
+    "Attendance_" +
+    date;
+
+
+    if(grade !== "ALL"){
+
+        filename +=
+        "_" +
+        grade.replace(
+            /\s+/g,
+            ""
+        );
+
+    }
+
+
+    if(section !== "ALL"){
+
+        filename +=
+        "_" +
+        section.replace(
+            /\s+/g,
+            "_"
+        );
+
+    }
+
+
+    filename += ".csv";
+
+
+    link.download =
+    filename;
+
+
+    document.body.appendChild(link);
+
+
+    link.click();
+
+
+    document.body.removeChild(link);
+
+
+    URL.revokeObjectURL(url);
+
+}
+
+
+/* =====================================================
+CSV ESCAPE
+===================================================== */
+
+function csvEscape(value){
+
+    const text =
+    String(value ?? "");
+
+
+    if(
+        text.includes(",") ||
+        text.includes('"') ||
+        text.includes("\n") ||
+        text.includes("\r")
+    ){
+
+        return '"' +
+        text.replace(
+            /"/g,
+            '""'
+        ) +
+        '"';
+
+    }
+
+
+    return text;
+}
+
+
+/* =====================================================
+PRINT ATTENDANCE
+===================================================== */
+
+function printAttendance(){
+
+    const filtered =
+    getFilteredExportData();
+
+
+    if(filtered.length === 0){
+
+        alert(
+            "No attendance records found for the selected filters."
+        );
+
+        return;
+    }
+
+
+    const date =
+    document
+    .getElementById("exportDate")
+    .value;
+
+
+    const grade =
+    document
+    .getElementById("exportGrade")
+    .value;
+
+
+    const section =
+    document
+    .getElementById("exportSection")
+    .value;
+
+
+    const printWindow =
+    window.open(
+        "",
+        "_blank"
+    );
+
+
+    if(!printWindow){
+
+        alert(
+            "Please allow pop-ups to print attendance."
+        );
+
+        return;
+    }
+
+
+    let rows = "";
+
+
+    filtered.forEach(
+        (record,index) => {
+
+            rows += `
+
+            <tr>
+
+            <td>
+            ${index + 1}
+            </td>
+
+            <td>
+            ${escapeHTML(
+                record.studentName
+            )}
+            </td>
+
+            <td>
+            ${escapeHTML(
+                record.grade
+            )}
+            </td>
+
+            <td>
+            ${escapeHTML(
+                record.section
+            )}
+            </td>
+
+            <td>
+            ${escapeHTML(
+                record.date
+            )}
+            </td>
+
+            <td>
+            ${escapeHTML(
+                record.timeIn
+            )}
+            </td>
+
+            </tr>
+
+            `;
+
+        }
+    );
+
+
+    printWindow.document.write(`
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Attendance Report</title>
+
+<style>
+
+body{
+font-family:Arial,sans-serif;
+padding:30px;
+color:#111827;
+}
+
+h1{
+margin-bottom:5px;
+}
+
+p{
+margin:5px 0 20px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+}
+
+th,td{
+border:1px solid #cbd5e1;
+padding:9px;
+text-align:left;
+}
+
+th{
+background:#f1f5f9;
+}
+
+.summary{
+margin-top:20px;
+font-weight:bold;
+}
+
+@media print{
+
+button{
+display:none;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>
+Student QR Attendance Report
+</h1>
+
+<p>
+Date:
+<strong>
+${escapeHTML(date)}
+</strong>
+</p>
+
+<p>
+Grade:
+<strong>
+${escapeHTML(grade)}
+</strong>
+</p>
+
+<p>
+Section:
+<strong>
+${escapeHTML(section)}
+</strong>
+</p>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>#</th>
+<th>Student</th>
+<th>Grade</th>
+<th>Section</th>
+<th>Date</th>
+<th>Time In</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+${rows}
+
+</tbody>
+
+</table>
+
+<div class="summary">
+
+Total Present:
+${filtered.length}
+
+</div>
+
+<br>
+
+<button onclick="window.print()">
+Print Report
+</button>
+
+</body>
+
+</html>
+
+`);
+
+
+    printWindow.document.close();
+
+}
+
+
+/* =====================================================
 FIREBASE ERROR
 ===================================================== */
 
@@ -2539,59 +3407,37 @@ function friendlyFirebaseError(error){
     switch(error.code){
 
         case "auth/email-already-in-use":
-
             return "That email is already registered.";
 
-
         case "auth/invalid-email":
-
             return "Invalid email address.";
 
-
         case "auth/weak-password":
-
             return "Password is too weak. Use at least 6 characters.";
 
-
         case "auth/user-not-found":
-
             return "Account not found.";
 
-
         case "auth/wrong-password":
-
             return "Incorrect password.";
 
-
         case "auth/invalid-credential":
-
             return "Incorrect email or password.";
 
-
         case "auth/too-many-requests":
-
             return "Too many attempts. Please wait a few minutes and try again.";
 
-
         case "auth/api-key-not-valid":
-
             return "Firebase API configuration is invalid.";
 
-
         case "auth/network-request-failed":
-
             return "Network error. Please check your internet connection.";
 
-
         case "permission-denied":
-
             return "Firestore permission denied. Please check the Firestore Rules.";
 
-
         case "failed-precondition":
-
             return "Firestore request failed because a required condition is not ready.";
-
 
         default:
 
@@ -2610,6 +3456,7 @@ function friendlyFirebaseError(error){
 
             return error.message ||
             "An unexpected error occurred.";
+
     }
 }
 
