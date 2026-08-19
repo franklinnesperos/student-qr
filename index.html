@@ -12,7 +12,6 @@
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
 <style>
@@ -50,6 +49,11 @@ cursor:pointer;
 font-weight:bold
 }
 
+button:disabled{
+opacity:.6;
+cursor:not-allowed
+}
+
 .btn-primary{
 background:#2563eb;
 color:white
@@ -67,6 +71,11 @@ color:white
 
 .btn-dark{
 background:#0f172a;
+color:white
+}
+
+.btn-warning{
+background:#d97706;
 color:white
 }
 
@@ -266,6 +275,26 @@ margin-top:12px;
 text-align:center
 }
 
+.verify-panel{
+background:#fff7ed;
+border:1px solid #fed7aa;
+color:#9a3412;
+padding:15px;
+border-radius:10px;
+margin-top:15px
+}
+
+.verify-panel button{
+margin-top:8px;
+width:100%
+}
+
+.loading{
+text-align:center;
+padding:20px;
+color:#64748b
+}
+
 @media(max-width:600px){
 
 header{
@@ -382,6 +411,7 @@ onclick="togglePassword('loginPassword','loginEye')"
 
 
 <button
+id="loginButton"
 class="btn-primary"
 style="width:100%"
 onclick="login()"
@@ -392,8 +422,39 @@ Login
 </button>
 
 
+<div
+id="verificationPanel"
+class="verify-panel hidden"
+>
+
+<strong>Email verification required.</strong>
+
+<p>
+Kung na-click mo na ang verification link sa email,
+i-click ang button sa ibaba para i-check ulit ang
+verification status ng account.
+</p>
+
+<button
+class="btn-success"
+onclick="checkVerification()"
+>
+I Have Verified My Email
+</button>
+
+<button
+class="btn-warning"
+onclick="resendVerification()"
+>
+Resend Verification Email
+</button>
+
+</div>
+
+
 <p class="verify-note">
-If your email is not verified yet, the system will automatically send a new verification email when you try to log in.
+After registration, check your Inbox or Spam folder
+for the Firebase verification email.
 </p>
 
 </div>
@@ -489,6 +550,7 @@ onclick="togglePassword('registerConfirmPassword','confirmEye')"
 
 
 <button
+id="registerButton"
 class="btn-success"
 style="width:100%"
 onclick="register()"
@@ -837,6 +899,8 @@ document
 
 clearMessage();
 
+hideVerificationPanel();
+
 }
 
 
@@ -851,6 +915,8 @@ document
 .classList.remove("hidden");
 
 clearMessage();
+
+hideVerificationPanel();
 
 }
 
@@ -875,6 +941,24 @@ function clearMessage(){
 document
 .getElementById("authMessage")
 .innerHTML = "";
+
+}
+
+
+function showVerificationPanel(){
+
+document
+.getElementById("verificationPanel")
+.classList.remove("hidden");
+
+}
+
+
+function hideVerificationPanel(){
+
+document
+.getElementById("verificationPanel")
+.classList.add("hidden");
 
 }
 
@@ -960,6 +1044,18 @@ return;
 }
 
 
+const registerButton =
+document.getElementById(
+"registerButton"
+);
+
+
+registerButton.disabled = true;
+
+registerButton.textContent =
+"Creating Account...";
+
+
 try{
 
 const result =
@@ -974,9 +1070,9 @@ const user =
 result.user;
 
 
-/*
+/* =====================================================
 CREATE USER PROFILE
-*/
+===================================================== */
 
 await db
 .collection("users")
@@ -1002,29 +1098,31 @@ firebase
 });
 
 
-/*
+/* =====================================================
 SEND VERIFICATION EMAIL
-*/
+===================================================== */
 
 await user.sendEmailVerification();
 
 
 showMessage(
-"Account created successfully! A verification email has been sent. Please check your Inbox or Spam folder.",
+"Account created successfully. A verification email has been sent to " +
+email +
+". Please check Inbox or Spam, click the verification link, then return here and login.",
 "success-message"
 );
 
 
-/*
-LOGOUT AFTER REGISTRATION
-*/
+/* =====================================================
+SIGN OUT
+===================================================== */
 
 await auth.signOut();
 
 
-/*
-CLEAR FORM
-*/
+/* =====================================================
+CLEAR REGISTER FORM
+===================================================== */
 
 document
 .getElementById("registerName")
@@ -1047,17 +1145,44 @@ document
 .value="";
 
 
+/* =====================================================
+SHOW LOGIN
+===================================================== */
+
+document
+.getElementById("loginEmail")
+.value =
+email;
+
+
 showLogin();
+
+
+showMessage(
+"Account created. Verify your email first, then login.",
+"success-message"
+);
 
 
 }catch(error){
 
-console.error(error);
+console.error(
+"REGISTER ERROR:",
+error
+);
+
 
 showMessage(
 friendlyFirebaseError(error),
 "error-message"
 );
+
+}finally{
+
+registerButton.disabled = false;
+
+registerButton.textContent =
+"Create Account";
 
 }
 
@@ -1095,6 +1220,21 @@ return;
 }
 
 
+const loginButton =
+document.getElementById(
+"loginButton"
+);
+
+
+loginButton.disabled = true;
+
+loginButton.textContent =
+"Checking...";
+
+
+hideVerificationPanel();
+
+
 try{
 
 const result =
@@ -1109,26 +1249,277 @@ const user =
 result.user;
 
 
-/*
-CHECK EMAIL VERIFICATION
-*/
+/* =====================================================
+IMPORTANT:
+REFRESH FIREBASE USER STATUS
+===================================================== */
 
-if(!user.emailVerified){
+await user.reload();
+
+
+const freshUser =
+auth.currentUser;
+
+
+if(!freshUser){
+
+showMessage(
+"Unable to load your account. Please login again.",
+"error-message"
+);
+
+return;
+
+}
+
+
+/* =====================================================
+CHECK EMAIL VERIFICATION
+===================================================== */
+
+if(!freshUser.emailVerified){
+
+showMessage(
+"Your email is not verified yet. Please click the verification link sent to your email.",
+"error-message"
+);
+
+showVerificationPanel();
+
+
+return;
+
+}
+
+
+/* =====================================================
+EMAIL IS VERIFIED
+===================================================== */
+
+hideVerificationPanel();
+
+showMessage(
+"Email verified successfully. Loading dashboard...",
+"success-message"
+);
+
+
+await loadDashboard(freshUser);
+
+
+}catch(error){
+
+console.error(
+"LOGIN ERROR:",
+error
+);
+
+
+showMessage(
+friendlyFirebaseError(error),
+"error-message"
+);
+
+}finally{
+
+loginButton.disabled = false;
+
+loginButton.textContent =
+"Login";
+
+}
+
+}
+
+
+/* =====================================================
+CHECK VERIFICATION
+===================================================== */
+
+async function checkVerification(){
 
 try{
+
+const user =
+auth.currentUser;
+
+
+if(!user){
+
+showMessage(
+"Please enter your email and password, then login first.",
+"error-message"
+);
+
+return;
+
+}
+
+
+await user.reload();
+
+
+const freshUser =
+auth.currentUser;
+
+
+if(
+freshUser &&
+freshUser.emailVerified
+){
+
+hideVerificationPanel();
+
+showMessage(
+"Email verified successfully. Loading dashboard...",
+"success-message"
+);
+
+
+await loadDashboard(
+freshUser
+);
+
+}else{
+
+showMessage(
+"Firebase still shows your email as unverified. Make sure you clicked the latest verification link. Then wait a few seconds and try again.",
+"error-message"
+);
+
+}
+
+}catch(error){
+
+console.error(
+"CHECK VERIFICATION ERROR:",
+error
+);
+
+
+showMessage(
+friendlyFirebaseError(error),
+"error-message"
+);
+
+}
+
+}
+
+
+/* =====================================================
+RESEND VERIFICATION
+===================================================== */
+
+async function resendVerification(){
+
+const email =
+document
+.getElementById("loginEmail")
+.value
+.trim();
+
+
+const password =
+document
+.getElementById("loginPassword")
+.value;
+
+
+if(!email || !password){
+
+showMessage(
+"Enter your email and password first.",
+"error-message"
+);
+
+return;
+
+}
+
+
+try{
+
+let user =
+auth.currentUser;
+
+
+/* =====================================================
+IF NOT LOGGED IN, SIGN IN TEMPORARILY
+===================================================== */
+
+if(!user){
+
+const result =
+await auth
+.signInWithEmailAndPassword(
+email,
+password
+);
+
+user =
+result.user;
+
+}
+
+
+/* =====================================================
+REFRESH USER
+===================================================== */
+
+await user.reload();
+
+
+user =
+auth.currentUser;
+
+
+/* =====================================================
+ALREADY VERIFIED
+===================================================== */
+
+if(user.emailVerified){
+
+showMessage(
+"Your email is already verified. You can login.",
+"success-message"
+);
+
+hideVerificationPanel();
+
+await loadDashboard(user);
+
+return;
+
+}
+
+
+/* =====================================================
+SEND NEW EMAIL
+===================================================== */
 
 await user.sendEmailVerification();
 
 
 showMessage(
-"Your email is not verified yet. A new verification email has been sent. Please check your Inbox or Spam folder.",
-"error-message"
+"A new verification email has been sent. Please check your Inbox or Spam folder.",
+"success-message"
 );
+
+
+/* =====================================================
+SIGN OUT
+===================================================== */
+
+await auth.signOut();
+
+showVerificationPanel();
+
 
 }catch(error){
 
 console.error(
-"Verification email error:",
+"RESEND ERROR:",
 error
 );
 
@@ -1139,44 +1530,18 @@ error.code ===
 ){
 
 showMessage(
-"Firebase has temporarily limited verification emails. Please wait a few minutes and check your Inbox or Spam folder.",
+"Firebase temporarily limited verification emails. Please wait several minutes before requesting another email.",
 "error-message"
 );
 
 }else{
 
 showMessage(
-"Your email is not verified and Firebase could not send another verification email right now.",
-"error-message"
-);
-
-}
-
-}
-
-
-await auth.signOut();
-
-return;
-
-}
-
-
-/*
-EMAIL VERIFIED
-*/
-
-await loadDashboard(user);
-
-
-}catch(error){
-
-console.error(error);
-
-showMessage(
 friendlyFirebaseError(error),
 "error-message"
 );
+
+}
 
 }
 
@@ -1198,20 +1563,41 @@ return;
 
 
 /*
-Do not automatically send email here.
-The login() function handles verification.
+Do not automatically enter dashboard
+until verification has been checked.
 */
 
-if(!user.emailVerified){
+try{
+
+await user.reload();
+
+const freshUser =
+auth.currentUser;
+
+
+if(
+freshUser &&
+freshUser.emailVerified
+){
+
+await loadDashboard(
+freshUser
+);
+
+}else{
 
 await auth.signOut();
 
-return;
-
 }
 
+}catch(error){
 
-await loadDashboard(user);
+console.error(
+"AUTH STATE ERROR:",
+error
+);
+
+}
 
 }
 );
@@ -1275,9 +1661,9 @@ return;
 }
 
 
-/*
+/* =====================================================
 SHOW DASHBOARD
-*/
+===================================================== */
 
 document
 .getElementById("authSection")
@@ -1327,7 +1713,10 @@ startScanner();
 
 }catch(error){
 
-console.error(error);
+console.error(
+"LOAD DASHBOARD ERROR:",
+error
+);
 
 alert(
 "Unable to load account: " +
@@ -1479,7 +1868,10 @@ alert(
 
 }catch(error){
 
-console.error(error);
+console.error(
+"ADD STUDENT ERROR:",
+error
+);
 
 alert(
 "Unable to register student: " +
@@ -1544,7 +1936,8 @@ width:256px
 
 button{
 padding:12px 20px;
-font-weight:bold
+font-weight:bold;
+cursor:pointer
 }
 
 </style>
@@ -1958,7 +2351,7 @@ errorMessage=>{
 ).catch(error=>{
 
 console.error(
-"Camera error:",
+"CAMERA ERROR:",
 error
 );
 
@@ -1982,6 +2375,17 @@ studentId
 ){
 
 if(!studentId)return;
+
+if(!currentUser){
+
+showScanResult(
+"Please login first.",
+false
+);
+
+return;
+
+}
 
 
 try{
@@ -2024,16 +2428,9 @@ return;
 }
 
 
-const now =
-new Date();
-
-
-/*
-PHILIPPINES LOCAL DATE
-*/
-
 const date =
-now.toLocaleDateString(
+new Date()
+.toLocaleDateString(
 "en-CA",
 {
 timeZone:"Asia/Manila"
@@ -2041,12 +2438,9 @@ timeZone:"Asia/Manila"
 );
 
 
-/*
-PHILIPPINES LOCAL TIME
-*/
-
 const time =
-now.toLocaleTimeString(
+new Date()
+.toLocaleTimeString(
 "en-PH",
 {
 timeZone:"Asia/Manila",
@@ -2132,7 +2526,7 @@ ${escapeHTML(student.name)}
 ${escapeHTML(student.grade)}
 -
 ${escapeHTML(student.section)}
-<br>
+<br><br>
 
 Time In:
 ${escapeHTML(time)}
@@ -2148,7 +2542,10 @@ await loadAttendance();
 
 }catch(error){
 
-console.error(error);
+console.error(
+"PROCESS QR ERROR:",
+error
+);
 
 
 showScanResult(
@@ -2405,6 +2802,14 @@ return "Firebase API configuration is invalid.";
 case "auth/network-request-failed":
 
 return "Network error. Please check your internet connection.";
+
+case "auth/user-disabled":
+
+return "This account has been disabled.";
+
+case "auth/operation-not-allowed":
+
+return "Email/password login is not enabled in Firebase Authentication.";
 
 default:
 
