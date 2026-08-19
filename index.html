@@ -50,7 +50,7 @@ font-weight:bold
 }
 
 button:disabled{
-opacity:.6;
+opacity:.65;
 cursor:not-allowed
 }
 
@@ -71,11 +71,6 @@ color:white
 
 .btn-dark{
 background:#0f172a;
-color:white
-}
-
-.btn-warning{
-background:#d97706;
 color:white
 }
 
@@ -230,6 +225,11 @@ background:#fee2e2;
 color:#991b1b
 }
 
+.info-message{
+background:#dbeafe;
+color:#1e40af
+}
+
 .section-title{
 display:flex;
 justify-content:space-between;
@@ -275,20 +275,6 @@ margin-top:12px;
 text-align:center
 }
 
-.verify-panel{
-background:#fff7ed;
-border:1px solid #fed7aa;
-color:#9a3412;
-padding:15px;
-border-radius:10px;
-margin-top:15px
-}
-
-.verify-panel button{
-margin-top:8px;
-width:100%
-}
-
 .loading{
 text-align:center;
 padding:20px;
@@ -318,10 +304,7 @@ margin:25px 15px
 
 <body>
 
-
-<!-- =====================================================
-HEADER
-===================================================== -->
+<!-- HEADER -->
 
 <header id="mainHeader" class="hidden">
 
@@ -337,9 +320,7 @@ Logout
 </header>
 
 
-<!-- =====================================================
-AUTH SECTION
-===================================================== -->
+<!-- AUTH -->
 
 <div id="authSection">
 
@@ -348,6 +329,7 @@ AUTH SECTION
 <div class="tabs">
 
 <button
+id="loginTab"
 class="btn-primary"
 onclick="showLogin()"
 >
@@ -355,6 +337,7 @@ Login
 </button>
 
 <button
+id="registerTab"
 class="btn-dark"
 onclick="showRegister()"
 >
@@ -363,18 +346,14 @@ Register
 
 </div>
 
-
 <div id="authMessage"></div>
 
 
-<!-- =====================================================
-LOGIN
-===================================================== -->
+<!-- LOGIN -->
 
 <div id="loginBox">
 
 <h2>Account Login</h2>
-
 
 <label>Email</label>
 
@@ -384,7 +363,6 @@ type="email"
 placeholder="your@email.com"
 autocomplete="email"
 >
-
 
 <label>Password</label>
 
@@ -409,60 +387,23 @@ onclick="togglePassword('loginPassword','loginEye')"
 
 </div>
 
-
 <button
 id="loginButton"
 class="btn-primary"
 style="width:100%"
 onclick="login()"
 >
-
 Login
-
 </button>
-
-
-<div
-id="verificationPanel"
-class="verify-panel hidden"
->
-
-<strong>Email verification required.</strong>
-
-<p>
-Kung na-click mo na ang verification link sa email,
-i-click ang button sa ibaba para i-check ulit ang
-verification status ng account.
-</p>
-
-<button
-class="btn-success"
-onclick="checkVerification()"
->
-I Have Verified My Email
-</button>
-
-<button
-class="btn-warning"
-onclick="resendVerification()"
->
-Resend Verification Email
-</button>
-
-</div>
-
 
 <p class="verify-note">
-After registration, check your Inbox or Spam folder
-for the Firebase verification email.
+If your email is not verified yet, the system will send a new verification email when possible.
 </p>
 
 </div>
 
 
-<!-- =====================================================
-REGISTER
-===================================================== -->
+<!-- REGISTER -->
 
 <div id="registerBox" class="hidden">
 
@@ -472,7 +413,6 @@ REGISTER
 Registration is for authorized teachers and school administrators only.
 </p>
 
-
 <label>Full Name</label>
 
 <input
@@ -480,7 +420,6 @@ id="registerName"
 type="text"
 placeholder="Juan Dela Cruz"
 >
-
 
 <label>Email</label>
 
@@ -491,7 +430,6 @@ placeholder="teacher@email.com"
 autocomplete="email"
 >
 
-
 <label>Phone Number</label>
 
 <input
@@ -499,7 +437,6 @@ id="registerPhone"
 type="tel"
 placeholder="+639XXXXXXXXX"
 >
-
 
 <label>Password</label>
 
@@ -524,7 +461,6 @@ onclick="togglePassword('registerPassword','registerEye')"
 
 </div>
 
-
 <label>Confirm Password</label>
 
 <div class="password-box">
@@ -548,16 +484,13 @@ onclick="togglePassword('registerConfirmPassword','confirmEye')"
 
 </div>
 
-
 <button
 id="registerButton"
 class="btn-success"
 style="width:100%"
 onclick="register()"
 >
-
 Create Account
-
 </button>
 
 </div>
@@ -567,9 +500,7 @@ Create Account
 </div>
 
 
-<!-- =====================================================
-DASHBOARD
-===================================================== -->
+<!-- DASHBOARD -->
 
 <div id="dashboard" class="hidden">
 
@@ -619,7 +550,6 @@ class="role-badge"
 
 </div>
 
-
 <div class="stat">
 
 <h3>Today's Attendance</h3>
@@ -629,7 +559,6 @@ class="role-badge"
 </strong>
 
 </div>
-
 
 <div class="stat">
 
@@ -656,7 +585,6 @@ class="role-badge"
 
 </div>
 
-
 <label>
 Student Full Name
 </label>
@@ -665,7 +593,6 @@ Student Full Name
 id="studentName"
 placeholder="Juan Dela Cruz"
 >
-
 
 <label>
 Grade
@@ -692,7 +619,6 @@ Select Grade
 
 </select>
 
-
 <label>
 Section
 </label>
@@ -702,14 +628,11 @@ id="studentSection"
 placeholder="Example: Rizal"
 >
 
-
 <button
 class="btn-success"
 onclick="addStudent()"
 >
-
 Register Student + Generate QR
-
 </button>
 
 </div>
@@ -724,8 +647,7 @@ Register Student + Generate QR
 </h2>
 
 <p>
-I-scan ang QR ng student.
-Automatic na mare-record ang date at exact time.
+I-scan ang QR ng student. Automatic na mare-record ang date at exact time.
 </p>
 
 <div id="reader"></div>
@@ -778,13 +700,11 @@ All Groups
 <thead>
 
 <tr>
-
 <th>Student</th>
 <th>Grade</th>
 <th>Section</th>
 <th>Date</th>
 <th>Time In</th>
-
 </tr>
 
 </thead>
@@ -831,16 +751,20 @@ appId:
 };
 
 
+/* =====================================================
+INITIALIZE FIREBASE
+===================================================== */
+
 firebase.initializeApp(firebaseConfig);
 
+const auth = firebase.auth();
 
-const auth =
-firebase.auth();
+const db = firebase.firestore();
 
 
-const db =
-firebase.firestore();
-
+/* =====================================================
+GLOBAL VARIABLES
+===================================================== */
 
 let currentUser = null;
 
@@ -852,19 +776,22 @@ let attendance = [];
 
 let scanner = null;
 
+let dashboardLoading = false;
+
+let authActionInProgress = false;
+
 
 /* =====================================================
 PASSWORD SHOW / HIDE
 ===================================================== */
 
-function togglePassword(inputId,eyeId){
+function togglePassword(inputId, eyeId){
 
 const input =
 document.getElementById(inputId);
 
 const eye =
 document.getElementById(eyeId);
-
 
 if(input.type === "password"){
 
@@ -899,8 +826,6 @@ document
 
 clearMessage();
 
-hideVerificationPanel();
-
 }
 
 
@@ -916,17 +841,15 @@ document
 
 clearMessage();
 
-hideVerificationPanel();
-
 }
 
 
 function showMessage(message,type=""){
 
-document
-.getElementById("authMessage")
-.innerHTML =
+const box =
+document.getElementById("authMessage");
 
+box.innerHTML =
 `
 <div class="message ${type}">
 ${escapeHTML(message)}
@@ -945,29 +868,27 @@ document
 }
 
 
-function showVerificationPanel(){
-
-document
-.getElementById("verificationPanel")
-.classList.remove("hidden");
-
-}
-
-
-function hideVerificationPanel(){
-
-document
-.getElementById("verificationPanel")
-.classList.add("hidden");
-
-}
-
-
 /* =====================================================
 REGISTER
 ===================================================== */
 
 async function register(){
+
+if(authActionInProgress){
+
+return;
+
+}
+
+authActionInProgress = true;
+
+const button =
+document.getElementById("registerButton");
+
+button.disabled = true;
+
+button.textContent = "Creating...";
+
 
 const name =
 document
@@ -980,7 +901,8 @@ const email =
 document
 .getElementById("registerEmail")
 .value
-.trim();
+.trim()
+.toLowerCase();
 
 
 const phone =
@@ -1015,6 +937,8 @@ showMessage(
 "error-message"
 );
 
+resetRegisterButton();
+
 return;
 
 }
@@ -1026,6 +950,8 @@ showMessage(
 "Password must be at least 6 characters.",
 "error-message"
 );
+
+resetRegisterButton();
 
 return;
 
@@ -1039,24 +965,18 @@ showMessage(
 "error-message"
 );
 
+resetRegisterButton();
+
 return;
 
 }
 
 
-const registerButton =
-document.getElementById(
-"registerButton"
-);
-
-
-registerButton.disabled = true;
-
-registerButton.textContent =
-"Creating Account...";
-
-
 try{
+
+/*
+CREATE FIREBASE AUTH ACCOUNT
+*/
 
 const result =
 await auth
@@ -1070,9 +990,14 @@ const user =
 result.user;
 
 
-/* =====================================================
-CREATE USER PROFILE
-===================================================== */
+/*
+CREATE FIRESTORE USER PROFILE
+
+IMPORTANT:
+This is the same document checked
+during login:
+users/{user.uid}
+*/
 
 await db
 .collection("users")
@@ -1098,31 +1023,29 @@ firebase
 });
 
 
-/* =====================================================
+/*
 SEND VERIFICATION EMAIL
-===================================================== */
+*/
 
 await user.sendEmailVerification();
 
 
 showMessage(
-"Account created successfully. A verification email has been sent to " +
-email +
-". Please check Inbox or Spam, click the verification link, then return here and login.",
+"Account created successfully. Please verify your email using the Firebase verification link sent to your Inbox or Spam folder.",
 "success-message"
 );
 
 
-/* =====================================================
+/*
 SIGN OUT
-===================================================== */
+*/
 
 await auth.signOut();
 
 
-/* =====================================================
-CLEAR REGISTER FORM
-===================================================== */
+/*
+CLEAR FORM
+*/
 
 document
 .getElementById("registerName")
@@ -1145,32 +1068,15 @@ document
 .value="";
 
 
-/* =====================================================
-SHOW LOGIN
-===================================================== */
-
-document
-.getElementById("loginEmail")
-.value =
-email;
-
-
 showLogin();
-
-
-showMessage(
-"Account created. Verify your email first, then login.",
-"success-message"
-);
 
 
 }catch(error){
 
 console.error(
-"REGISTER ERROR:",
+"Registration error:",
 error
 );
-
 
 showMessage(
 friendlyFirebaseError(error),
@@ -1179,9 +1085,25 @@ friendlyFirebaseError(error),
 
 }finally{
 
-registerButton.disabled = false;
+resetRegisterButton();
 
-registerButton.textContent =
+authActionInProgress = false;
+
+}
+
+}
+
+
+function resetRegisterButton(){
+
+const button =
+document.getElementById("registerButton");
+
+if(button){
+
+button.disabled = false;
+
+button.textContent =
 "Create Account";
 
 }
@@ -1195,11 +1117,28 @@ LOGIN
 
 async function login(){
 
+if(authActionInProgress){
+
+return;
+
+}
+
+authActionInProgress = true;
+
+const button =
+document.getElementById("loginButton");
+
+button.disabled = true;
+
+button.textContent = "Checking...";
+
+
 const email =
 document
 .getElementById("loginEmail")
 .value
-.trim();
+.trim()
+.toLowerCase();
 
 
 const password =
@@ -1215,27 +1154,18 @@ showMessage(
 "error-message"
 );
 
+resetLoginButton();
+
 return;
 
 }
 
 
-const loginButton =
-document.getElementById(
-"loginButton"
-);
-
-
-loginButton.disabled = true;
-
-loginButton.textContent =
-"Checking...";
-
-
-hideVerificationPanel();
-
-
 try{
+
+/*
+SIGN IN
+*/
 
 const result =
 await auth
@@ -1249,10 +1179,11 @@ const user =
 result.user;
 
 
-/* =====================================================
-IMPORTANT:
-REFRESH FIREBASE USER STATUS
-===================================================== */
+/*
+REFRESH USER INFORMATION
+
+This is important after email verification.
+*/
 
 await user.reload();
 
@@ -1263,40 +1194,70 @@ auth.currentUser;
 
 if(!freshUser){
 
-showMessage(
-"Unable to load your account. Please login again.",
-"error-message"
+throw new Error(
+"Firebase could not restore the signed-in account."
 );
-
-return;
 
 }
 
 
-/* =====================================================
+/*
 CHECK EMAIL VERIFICATION
-===================================================== */
+*/
 
 if(!freshUser.emailVerified){
 
+try{
+
+await freshUser.sendEmailVerification();
+
 showMessage(
-"Your email is not verified yet. Please click the verification link sent to your email.",
+"Your email is not verified yet. A new verification email has been sent. Check Inbox or Spam.",
 "error-message"
 );
 
-showVerificationPanel();
+}catch(error){
 
+console.error(
+"Verification email error:",
+error
+);
+
+if(
+error.code ===
+"auth/too-many-requests"
+){
+
+showMessage(
+"Firebase temporarily limited verification emails. Wait a few minutes and check your Inbox or Spam.",
+"error-message"
+);
+
+}else{
+
+showMessage(
+"Your email is not verified and Firebase could not send another verification email right now.",
+"error-message"
+);
+
+}
+
+}
+
+await auth.signOut();
+
+resetLoginButton();
+
+authActionInProgress = false;
 
 return;
 
 }
 
 
-/* =====================================================
+/*
 EMAIL IS VERIFIED
-===================================================== */
-
-hideVerificationPanel();
+*/
 
 showMessage(
 "Email verified successfully. Loading dashboard...",
@@ -1304,16 +1265,19 @@ showMessage(
 );
 
 
+/*
+LOAD DASHBOARD
+*/
+
 await loadDashboard(freshUser);
 
 
 }catch(error){
 
 console.error(
-"LOGIN ERROR:",
+"Login error:",
 error
 );
-
 
 showMessage(
 friendlyFirebaseError(error),
@@ -1322,226 +1286,25 @@ friendlyFirebaseError(error),
 
 }finally{
 
-loginButton.disabled = false;
+resetLoginButton();
 
-loginButton.textContent =
-"Login";
-
-}
-
-}
-
-
-/* =====================================================
-CHECK VERIFICATION
-===================================================== */
-
-async function checkVerification(){
-
-try{
-
-const user =
-auth.currentUser;
-
-
-if(!user){
-
-showMessage(
-"Please enter your email and password, then login first.",
-"error-message"
-);
-
-return;
-
-}
-
-
-await user.reload();
-
-
-const freshUser =
-auth.currentUser;
-
-
-if(
-freshUser &&
-freshUser.emailVerified
-){
-
-hideVerificationPanel();
-
-showMessage(
-"Email verified successfully. Loading dashboard...",
-"success-message"
-);
-
-
-await loadDashboard(
-freshUser
-);
-
-}else{
-
-showMessage(
-"Firebase still shows your email as unverified. Make sure you clicked the latest verification link. Then wait a few seconds and try again.",
-"error-message"
-);
-
-}
-
-}catch(error){
-
-console.error(
-"CHECK VERIFICATION ERROR:",
-error
-);
-
-
-showMessage(
-friendlyFirebaseError(error),
-"error-message"
-);
+authActionInProgress = false;
 
 }
 
 }
 
 
-/* =====================================================
-RESEND VERIFICATION
-===================================================== */
+function resetLoginButton(){
 
-async function resendVerification(){
+const button =
+document.getElementById("loginButton");
 
-const email =
-document
-.getElementById("loginEmail")
-.value
-.trim();
+if(button){
 
+button.disabled = false;
 
-const password =
-document
-.getElementById("loginPassword")
-.value;
-
-
-if(!email || !password){
-
-showMessage(
-"Enter your email and password first.",
-"error-message"
-);
-
-return;
-
-}
-
-
-try{
-
-let user =
-auth.currentUser;
-
-
-/* =====================================================
-IF NOT LOGGED IN, SIGN IN TEMPORARILY
-===================================================== */
-
-if(!user){
-
-const result =
-await auth
-.signInWithEmailAndPassword(
-email,
-password
-);
-
-user =
-result.user;
-
-}
-
-
-/* =====================================================
-REFRESH USER
-===================================================== */
-
-await user.reload();
-
-
-user =
-auth.currentUser;
-
-
-/* =====================================================
-ALREADY VERIFIED
-===================================================== */
-
-if(user.emailVerified){
-
-showMessage(
-"Your email is already verified. You can login.",
-"success-message"
-);
-
-hideVerificationPanel();
-
-await loadDashboard(user);
-
-return;
-
-}
-
-
-/* =====================================================
-SEND NEW EMAIL
-===================================================== */
-
-await user.sendEmailVerification();
-
-
-showMessage(
-"A new verification email has been sent. Please check your Inbox or Spam folder.",
-"success-message"
-);
-
-
-/* =====================================================
-SIGN OUT
-===================================================== */
-
-await auth.signOut();
-
-showVerificationPanel();
-
-
-}catch(error){
-
-console.error(
-"RESEND ERROR:",
-error
-);
-
-
-if(
-error.code ===
-"auth/too-many-requests"
-){
-
-showMessage(
-"Firebase temporarily limited verification emails. Please wait several minutes before requesting another email.",
-"error-message"
-);
-
-}else{
-
-showMessage(
-friendlyFirebaseError(error),
-"error-message"
-);
-
-}
+button.textContent = "Login";
 
 }
 
@@ -1563,9 +1326,16 @@ return;
 
 
 /*
-Do not automatically enter dashboard
-until verification has been checked.
+If login() is already handling this user,
+do not load the dashboard twice.
 */
+
+if(dashboardLoading){
+
+return;
+
+}
+
 
 try{
 
@@ -1575,25 +1345,44 @@ const freshUser =
 auth.currentUser;
 
 
+if(!freshUser){
+
+return;
+
+}
+
+
+/*
+Do not automatically sign out verified users.
+*/
+
+if(!freshUser.emailVerified){
+
+return;
+
+}
+
+
+/*
+If the page was refreshed while already logged in,
+load dashboard.
+*/
+
 if(
-freshUser &&
-freshUser.emailVerified
+document
+.getElementById("dashboard")
+.classList
+.contains("hidden")
 ){
 
-await loadDashboard(
-freshUser
-);
-
-}else{
-
-await auth.signOut();
+await loadDashboard(freshUser);
 
 }
 
 }catch(error){
 
 console.error(
-"AUTH STATE ERROR:",
+"Auth state error:",
 error
 );
 
@@ -1609,81 +1398,171 @@ LOAD DASHBOARD
 
 async function loadDashboard(user){
 
+if(dashboardLoading){
+
+return;
+
+}
+
+dashboardLoading = true;
+
 try{
 
-currentUser =
-user;
+currentUser = user;
 
 
-const profile =
+/*
+GET USER PROFILE
+*/
+
+let profile =
 await db
 .collection("users")
 .doc(user.uid)
 .get();
 
 
+/*
+IMPORTANT FIX:
+
+If Firebase Authentication account exists
+but users/{uid} does not exist, create it.
+
+This fixes the error:
+
+"Account profile was not found."
+*/
+
 if(!profile.exists){
 
-showMessage(
-"Account profile was not found. Please contact the administrator.",
-"error-message"
+const defaultProfile = {
+
+name:
+user.displayName ||
+user.email.split("@")[0],
+
+email:
+user.email,
+
+phone:"",
+
+role:"teacher",
+
+status:"active",
+
+createdAt:
+firebase
+.firestore
+.FieldValue
+.serverTimestamp(),
+
+profileCreatedAutomatically:true
+
+};
+
+
+try{
+
+await db
+.collection("users")
+.doc(user.uid)
+.set(defaultProfile);
+
+
+profile =
+await db
+.collection("users")
+.doc(user.uid)
+.get();
+
+
+}catch(profileError){
+
+console.error(
+"Profile creation error:",
+profileError
 );
 
-await auth.signOut();
+throw new Error(
+"Your Firebase account is verified, but the user profile could not be created. Check your Firestore Rules."
+);
 
-return;
+}
 
 }
 
 
+/*
+READ PROFILE
+*/
+
 const data =
-profile.data();
+profile.data() || {};
 
 
 currentRole =
 data.role || "teacher";
 
 
+/*
+CHECK ROLE
+*/
+
 if(
 currentRole !== "teacher" &&
 currentRole !== "admin"
 ){
 
-showMessage(
-"This account does not have permission to access the system.",
-"error-message"
+throw new Error(
+"This account does not have permission to access the system."
 );
-
-await auth.signOut();
-
-return;
 
 }
 
 
-/* =====================================================
+/*
+CHECK STATUS
+*/
+
+if(
+data.status &&
+data.status !== "active"
+){
+
+throw new Error(
+"This account is not active."
+);
+
+}
+
+
+/*
 SHOW DASHBOARD
-===================================================== */
+*/
 
 document
 .getElementById("authSection")
-.classList.add("hidden");
+.classList
+.add("hidden");
 
 
 document
 .getElementById("dashboard")
-.classList.remove("hidden");
+.classList
+.remove("hidden");
 
 
 document
 .getElementById("mainHeader")
-.classList.remove("hidden");
+.classList
+.remove("hidden");
 
 
 document
 .getElementById("userName")
 .textContent =
-data.name || user.email;
+data.name ||
+user.email;
 
 
 document
@@ -1701,12 +1580,25 @@ currentRole.toUpperCase();
 document
 .getElementById("verificationStatus")
 .innerHTML =
-"🟢 Account verified";
+`
+<span style="color:#166534;font-weight:bold">
+🟢 Account verified
+</span>
+`;
 
+
+/*
+LOAD DATA
+*/
 
 await loadStudents();
 
 await loadAttendance();
+
+
+/*
+START CAMERA
+*/
 
 startScanner();
 
@@ -1714,14 +1606,19 @@ startScanner();
 }catch(error){
 
 console.error(
-"LOAD DASHBOARD ERROR:",
+"Dashboard error:",
 error
 );
 
-alert(
-"Unable to load account: " +
-error.message
+showMessage(
+error.message ||
+"Unable to load account.",
+"error-message"
 );
+
+}finally{
+
+dashboardLoading = false;
 
 }
 
@@ -1734,22 +1631,39 @@ LOGOUT
 
 async function logout(){
 
+try{
+
 if(scanner){
 
 try{
 
 await scanner.stop();
 
-}catch(e){}
+}catch(e){
+
+console.warn(
+"Scanner stop error:",
+e
+);
+
+}
 
 scanner = null;
 
 }
 
-
 await auth.signOut();
 
 location.reload();
+
+}catch(error){
+
+console.error(
+"Logout error:",
+error
+);
+
+}
 
 }
 
@@ -1791,7 +1705,11 @@ document
 .trim();
 
 
-if(!name || !grade || !section){
+if(
+!name ||
+!grade ||
+!section
+){
 
 alert(
 "Complete all student information."
@@ -1824,9 +1742,11 @@ section:section,
 
 qrCode:studentId,
 
-ownerId:currentUser.uid,
+ownerId:
+currentUser.uid,
 
-createdBy:currentUser.uid,
+createdBy:
+currentUser.uid,
 
 createdAt:
 firebase
@@ -1869,7 +1789,7 @@ alert(
 }catch(error){
 
 console.error(
-"ADD STUDENT ERROR:",
+"Add student error:",
 error
 );
 
@@ -1937,6 +1857,10 @@ width:256px
 button{
 padding:12px 20px;
 font-weight:bold;
+border:0;
+border-radius:8px;
+background:#2563eb;
+color:white;
 cursor:pointer
 }
 
@@ -1994,6 +1918,8 @@ height:256
 
 `);
 
+qrWindow.document.close();
+
 }
 
 
@@ -2003,7 +1929,11 @@ LOAD STUDENTS
 
 async function loadStudents(){
 
-if(!currentUser)return;
+if(!currentUser){
+
+return;
+
+}
 
 
 const snapshot =
@@ -2138,9 +2068,11 @@ const filtered =
 students.filter(
 student=>{
 
-if(selected==="ALL")
+if(selected === "ALL"){
+
 return true;
 
+}
 
 return(
 student.grade +
@@ -2152,7 +2084,7 @@ student.section
 );
 
 
-const groups={};
+const groups = {};
 
 
 filtered.forEach(student=>{
@@ -2163,8 +2095,11 @@ student.grade +
 student.section;
 
 
-if(!groups[key])
+if(!groups[key]){
+
 groups[key]=[];
+
+}
 
 
 groups[key].push(student);
@@ -2261,7 +2196,6 @@ card.appendChild(
 document.createElement("br")
 );
 
-
 card.appendChild(
 document.createElement("br")
 );
@@ -2315,7 +2249,11 @@ QR SCANNER
 
 function startScanner(){
 
-if(scanner)return;
+if(scanner){
+
+return;
+
+}
 
 
 scanner =
@@ -2351,10 +2289,9 @@ errorMessage=>{
 ).catch(error=>{
 
 console.error(
-"CAMERA ERROR:",
+"Camera error:",
 error
 );
-
 
 showScanResult(
 "Camera permission is required to scan QR.",
@@ -2374,14 +2311,10 @@ async function processQRCode(
 studentId
 ){
 
-if(!studentId)return;
-
-if(!currentUser){
-
-showScanResult(
-"Please login first.",
-false
-);
+if(
+!studentId ||
+!currentUser
+){
 
 return;
 
@@ -2428,9 +2361,16 @@ return;
 }
 
 
+const now =
+new Date();
+
+
+/*
+PHILIPPINES DATE
+*/
+
 const date =
-new Date()
-.toLocaleDateString(
+now.toLocaleDateString(
 "en-CA",
 {
 timeZone:"Asia/Manila"
@@ -2438,9 +2378,12 @@ timeZone:"Asia/Manila"
 );
 
 
+/*
+PHILIPPINES TIME
+*/
+
 const time =
-new Date()
-.toLocaleTimeString(
+now.toLocaleTimeString(
 "en-PH",
 {
 timeZone:"Asia/Manila",
@@ -2526,7 +2469,7 @@ ${escapeHTML(student.name)}
 ${escapeHTML(student.grade)}
 -
 ${escapeHTML(student.section)}
-<br><br>
+<br>
 
 Time In:
 ${escapeHTML(time)}
@@ -2543,10 +2486,9 @@ await loadAttendance();
 }catch(error){
 
 console.error(
-"PROCESS QR ERROR:",
+"QR processing error:",
 error
 );
-
 
 showScanResult(
 "Error: " +
@@ -2599,7 +2541,11 @@ LOAD ATTENDANCE
 
 async function loadAttendance(){
 
-if(!currentUser)return;
+if(!currentUser){
+
+return;
+
+}
 
 
 const snapshot =
@@ -2671,7 +2617,7 @@ timeZone:"Asia/Manila"
 
 const todayCount =
 attendance.filter(
-a=>a.date===today
+a=>a.date === today
 ).length;
 
 
@@ -2803,13 +2749,9 @@ case "auth/network-request-failed":
 
 return "Network error. Please check your internet connection.";
 
-case "auth/user-disabled":
+case "permission-denied":
 
-return "This account has been disabled.";
-
-case "auth/operation-not-allowed":
-
-return "Email/password login is not enabled in Firebase Authentication.";
+return "Firestore permission denied. Please check your Firestore Rules.";
 
 default:
 
