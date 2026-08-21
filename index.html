@@ -77,6 +77,16 @@ button:disabled{
     color:white;
 }
 
+.btn-warning{
+    background:#d97706;
+    color:white;
+}
+
+.btn-purple{
+    background:#7c3aed;
+    color:white;
+}
+
 input,select{
     width:100%;
     padding:12px;
@@ -111,8 +121,8 @@ label{
 }
 
 .auth-box{
-    max-width:450px;
-    margin:60px auto;
+    max-width:500px;
+    margin:40px auto;
 }
 
 .auth-box h2{
@@ -185,6 +195,55 @@ label{
     font-weight:bold;
 }
 
+.status-badge{
+    display:inline-block;
+    padding:5px 9px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.status-in{
+    background:#dcfce7;
+    color:#166534;
+}
+
+.status-out{
+    background:#dbeafe;
+    color:#1d4ed8;
+}
+
+.status-alert{
+    background:#fee2e2;
+    color:#991b1b;
+}
+
+.status-warning{
+    background:#fef3c7;
+    color:#92400e;
+}
+
+.gate-mode{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+    margin-bottom:18px;
+}
+
+.gate-mode button{
+    padding:15px;
+}
+
+.gate-mode .active{
+    outline:4px solid rgba(37,99,235,.2);
+}
+
+.scan-settings{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:10px;
+}
+
 table{
     width:100%;
     border-collapse:collapse;
@@ -226,6 +285,39 @@ th{
 .error-message{
     background:#fee2e2;
     color:#991b1b;
+}
+
+.warning-message{
+    background:#fef3c7;
+    color:#92400e;
+}
+
+.red-alert{
+    background:#fee2e2!important;
+    color:#991b1b!important;
+    border:2px solid #dc2626;
+    animation:alertPulse 1s infinite;
+}
+
+@keyframes alertPulse{
+    0%{
+        box-shadow:0 0 0 0 rgba(220,38,38,.4);
+    }
+    70%{
+        box-shadow:0 0 0 8px rgba(220,38,38,0);
+    }
+    100%{
+        box-shadow:0 0 0 0 rgba(220,38,38,0);
+    }
+}
+
+.red-row{
+    background:#fee2e2!important;
+}
+
+.red-row td{
+    color:#991b1b;
+    font-weight:bold;
 }
 
 .section-title{
@@ -318,6 +410,96 @@ th{
     margin-top:5px;
 }
 
+.info-box{
+    background:#eff6ff;
+    border:1px solid #bfdbfe;
+    color:#1e40af;
+    border-radius:10px;
+    padding:14px;
+    margin-bottom:15px;
+}
+
+.guard-box{
+    background:#fef3c7;
+    border:1px solid #f59e0b;
+    color:#92400e;
+    border-radius:10px;
+    padding:14px;
+    margin-bottom:15px;
+}
+
+.teacher-box{
+    background:#ecfdf5;
+    border:1px solid #86efac;
+    color:#166534;
+    border-radius:10px;
+    padding:14px;
+    margin-bottom:15px;
+}
+
+.timeout-box{
+    background:#fff7ed;
+    border:1px solid #fdba74;
+    color:#9a3412;
+    border-radius:10px;
+    padding:14px;
+    margin-bottom:15px;
+}
+
+#notificationArea{
+    position:fixed;
+    top:20px;
+    right:20px;
+    z-index:99999;
+    width:min(380px,calc(100% - 40px));
+}
+
+.notification{
+    background:white;
+    border-radius:12px;
+    padding:15px;
+    margin-bottom:10px;
+    box-shadow:0 8px 30px rgba(0,0,0,.18);
+    border-left:6px solid #2563eb;
+}
+
+.notification.success{
+    border-left-color:#16a34a;
+}
+
+.notification.warning{
+    border-left-color:#d97706;
+}
+
+.notification.danger{
+    border-left-color:#dc2626;
+}
+
+.notification strong{
+    display:block;
+    margin-bottom:5px;
+}
+
+.recent-scan{
+    margin-top:18px;
+    padding:15px;
+    border-radius:12px;
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+}
+
+.recent-scan.red{
+    background:#fee2e2;
+    border:2px solid #dc2626;
+    color:#991b1b;
+}
+
+.scan-status{
+    text-align:center;
+    font-weight:bold;
+    margin-top:10px;
+}
+
 @media(max-width:600px){
 
     header{
@@ -337,11 +519,17 @@ th{
     .export-controls{
         grid-template-columns:1fr;
     }
+
+    .gate-mode{
+        grid-template-columns:1fr;
+    }
 }
 </style>
 </head>
 
 <body>
+
+<div id="notificationArea"></div>
 
 <header id="mainHeader" class="hidden">
 
@@ -439,10 +627,10 @@ After registration, check your Inbox or Spam folder for the Firebase verificatio
 
 <div id="registerBox" class="hidden">
 
-<h2>Create Teacher Account</h2>
+<h2>Create Account</h2>
 
 <p class="small-note">
-Registration is for authorized teachers and school administrators only.
+Teacher/adviser accounts and authorized gate guard accounts can register here.
 </p>
 
 <label>Full Name</label>
@@ -469,6 +657,36 @@ id="registerPhone"
 type="tel"
 placeholder="+639XXXXXXXXX"
 >
+
+<label>Account Type</label>
+
+<select id="registerRole" onchange="toggleRegisterSection()">
+
+<option value="teacher">
+Teacher / Adviser
+</option>
+
+<option value="guard">
+Gate Guard
+</option>
+
+</select>
+
+<div id="teacherSectionRegistration">
+
+<label>Assigned Section</label>
+
+<input
+id="registerSection"
+type="text"
+placeholder="Example: Rizal"
+>
+
+<p class="small-note">
+A section can only be assigned to one teacher/adviser.
+</p>
+
+</div>
 
 <label>Password</label>
 
@@ -559,7 +777,42 @@ Role:
 <span id="userRole" class="role-badge"></span>
 </p>
 
+<p>
+Assigned Section:
+<strong id="assignedSection">
+All
+</strong>
+</p>
+
 <p id="verificationStatus"></p>
+
+</div>
+
+
+<!-- ROLE INFORMATION -->
+
+<div
+id="teacherInfo"
+class="teacher-box hidden">
+
+<strong>👨‍🏫 Adviser Mode</strong>
+
+<p style="margin-bottom:0">
+You can only view and manage students belonging to your assigned section.
+</p>
+
+</div>
+
+
+<div
+id="guardInfo"
+class="guard-box hidden">
+
+<strong>🚪 Gate Guard Mode</strong>
+
+<p style="margin-bottom:0">
+Scan student QR codes at the gate. Gate In and Gate Out are recorded automatically.
+</p>
 
 </div>
 
@@ -598,17 +851,33 @@ Role:
 
 </div>
 
+<div class="stat">
+
+<h3>Currently Inside</h3>
+
+<strong id="currentlyInside">
+0
+</strong>
+
+</div>
+
 </div>
 
 
 <!-- REGISTER STUDENT -->
 
-<div class="card">
+<div
+id="studentRegistrationCard"
+class="card">
 
 <div class="section-title">
 
 <h2>➕ Register Student</h2>
 
+</div>
+
+<div class="info-box">
+The student will automatically be assigned to your registered adviser section.
 </div>
 
 <label>Student Full Name</label>
@@ -645,7 +914,8 @@ Select Grade
 
 <input
 id="studentSection"
-placeholder="Example: Rizal"
+placeholder="Assigned adviser section"
+readonly
 >
 
 <button
@@ -664,23 +934,111 @@ Register Student + Generate QR
 
 <div class="card">
 
-<h2>📷 Scan Student QR</h2>
+<h2>📷 QR Scanner</h2>
+
+<div
+id="teacherScannerDescription"
+class="hidden">
 
 <p>
-I-scan ang QR ng student.
-Automatic na mare-record ang date at exact time.
+Scan the student's QR for attendance.
+Automatic Gate In, Gate Out and timeout handling are applied.
 </p>
+
+</div>
+
+<div
+id="guardScannerDescription"
+class="hidden">
+
+<p>
+Use this scanner at the school gate.
+Choose <strong>Gate In</strong> when the student enters and
+<strong>Gate Out</strong> when the student exits.
+</p>
+
+</div>
+
+
+<div class="gate-mode">
+
+<button
+id="gateInButton"
+class="btn-success active"
+onclick="setGateMode('IN')">
+
+🚪 Gate In
+
+</button>
+
+<button
+id="gateOutButton"
+class="btn-primary"
+onclick="setGateMode('OUT')">
+
+🚶 Gate Out
+
+</button>
+
+</div>
+
+
+<div class="scan-settings">
+
+<div>
+
+<label>Current Scan Mode</label>
+
+<select
+id="scanMode"
+onchange="setGateMode(this.value)">
+
+<option value="IN">
+Gate In
+</option>
+
+<option value="OUT">
+Gate Out
+</option>
+
+</select>
+
+</div>
+
+<div>
+
+<label>Timeout</label>
+
+<input
+value="2 hours 30 minutes"
+readonly
+>
+
+</div>
+
+</div>
+
 
 <div id="reader"></div>
 
-<div id="scanResult"></div>
+<div
+id="scanResult"
+style="margin-top:15px">
+</div>
+
+<div
+id="recentScan"
+class="recent-scan hidden">
+</div>
 
 </div>
 
 
 <!-- STUDENTS -->
 
-<div class="card">
+<div
+id="studentsCard"
+class="card">
 
 <div class="section-title">
 
@@ -707,7 +1065,9 @@ All Groups
 ATTENDANCE EXPORT
 ===================================================== -->
 
-<div class="card">
+<div
+id="exportCard"
+class="card">
 
 <h2>📥 Attendance Export</h2>
 
@@ -862,7 +1222,11 @@ ATTENDANCE RECORDS
 <th>Grade</th>
 <th>Section</th>
 <th>Date</th>
-<th>Time In</th>
+<th>Gate In</th>
+<th>Gate Out</th>
+<th>Status</th>
+<th>Scan Type</th>
+<th>Last Scan</th>
 </tr>
 
 </thead>
@@ -914,8 +1278,13 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 
 
+/* =====================================================
+GLOBAL VARIABLES
+===================================================== */
+
 let currentUser = null;
 let currentRole = null;
+let currentProfile = null;
 
 let students = [];
 let attendance = [];
@@ -923,6 +1292,10 @@ let attendance = [];
 let scanner = null;
 let scannerStarting = false;
 let processingQR = false;
+
+let gateMode = "IN";
+
+const TIMEOUT_MINUTES = 150;
 
 
 /* =====================================================
@@ -980,6 +1353,33 @@ function showRegister(){
     .classList.remove("hidden");
 
     clearMessage();
+
+    toggleRegisterSection();
+}
+
+
+function toggleRegisterSection(){
+
+    const role =
+    document
+    .getElementById("registerRole")
+    .value;
+
+    const sectionBox =
+    document
+    .getElementById(
+        "teacherSectionRegistration"
+    );
+
+    if(role === "teacher"){
+
+        sectionBox.classList.remove("hidden");
+
+    }else{
+
+        sectionBox.classList.add("hidden");
+
+    }
 }
 
 
@@ -1012,29 +1412,49 @@ REGISTER
 async function register(){
 
     const button =
-    document.getElementById("registerButton");
+    document.getElementById(
+        "registerButton"
+    );
 
     const name =
-    document.getElementById("registerName")
+    document
+    .getElementById("registerName")
     .value
     .trim();
 
     const email =
-    document.getElementById("registerEmail")
+    document
+    .getElementById("registerEmail")
     .value
     .trim();
 
     const phone =
-    document.getElementById("registerPhone")
+    document
+    .getElementById("registerPhone")
+    .value
+    .trim();
+
+    const role =
+    document
+    .getElementById("registerRole")
+    .value;
+
+    const section =
+    document
+    .getElementById("registerSection")
     .value
     .trim();
 
     const password =
-    document.getElementById("registerPassword")
+    document
+    .getElementById("registerPassword")
     .value;
 
     const confirmPassword =
-    document.getElementById("registerConfirmPassword")
+    document
+    .getElementById(
+        "registerConfirmPassword"
+    )
     .value;
 
 
@@ -1047,7 +1467,21 @@ async function register(){
     ){
 
         showMessage(
-            "Please complete all fields.",
+            "Please complete all required fields.",
+            "error-message"
+        );
+
+        return;
+    }
+
+
+    if(
+        role === "teacher" &&
+        !section
+    ){
+
+        showMessage(
+            "Teacher/adviser accounts must have an assigned section.",
             "error-message"
         );
 
@@ -1078,10 +1512,55 @@ async function register(){
 
 
     button.disabled = true;
-    button.textContent = "Creating account...";
+    button.textContent =
+        "Checking section...";
 
 
     try{
+
+        /* -------------------------------------------------
+        CHECK SECTION OWNERSHIP
+        ------------------------------------------------- */
+
+        if(role === "teacher"){
+
+            const normalizedSection =
+                normalizeSection(section);
+
+
+            const sectionSnapshot =
+            await db
+            .collection("users")
+            .where(
+                "role",
+                "==",
+                "teacher"
+            )
+            .where(
+                "sectionNormalized",
+                "==",
+                normalizedSection
+            )
+            .limit(1)
+            .get();
+
+
+            if(!sectionSnapshot.empty){
+
+                showMessage(
+                    "This section is already assigned to another teacher/adviser. A section can only belong to one teacher.",
+                    "error-message"
+                );
+
+                return;
+            }
+
+        }
+
+
+        button.textContent =
+            "Creating account...";
+
 
         const result =
         await auth
@@ -1093,15 +1572,16 @@ async function register(){
         const user = result.user;
 
 
-        await db
-        .collection("users")
-        .doc(user.uid)
-        .set({
+        const userData = {
 
             name:name,
+
             email:email,
+
             phone:phone,
-            role:"teacher",
+
+            role:role,
+
             status:"active",
 
             createdAt:
@@ -1110,7 +1590,32 @@ async function register(){
             .FieldValue
             .serverTimestamp()
 
-        });
+        };
+
+
+        if(role === "teacher"){
+
+            userData.section =
+                section;
+
+            userData.sectionNormalized =
+                normalizeSection(section);
+
+        }else{
+
+            userData.section = "";
+
+            userData.sectionNormalized = "";
+
+        }
+
+
+        await db
+        .collection("users")
+        .doc(user.uid)
+        .set(
+            userData
+        );
 
 
         await user.sendEmailVerification();
@@ -1125,11 +1630,29 @@ async function register(){
         await auth.signOut();
 
 
-        document.getElementById("registerName").value = "";
-        document.getElementById("registerEmail").value = "";
-        document.getElementById("registerPhone").value = "";
-        document.getElementById("registerPassword").value = "";
-        document.getElementById("registerConfirmPassword").value = "";
+        document.getElementById(
+            "registerName"
+        ).value = "";
+
+        document.getElementById(
+            "registerEmail"
+        ).value = "";
+
+        document.getElementById(
+            "registerPhone"
+        ).value = "";
+
+        document.getElementById(
+            "registerSection"
+        ).value = "";
+
+        document.getElementById(
+            "registerPassword"
+        ).value = "";
+
+        document.getElementById(
+            "registerConfirmPassword"
+        ).value = "";
 
 
         showLogin();
@@ -1153,7 +1676,9 @@ async function register(){
     }finally{
 
         button.disabled = false;
-        button.textContent = "Create Account";
+
+        button.textContent =
+            "Create Account";
 
     }
 }
@@ -1166,7 +1691,9 @@ LOGIN
 async function login(){
 
     const button =
-    document.getElementById("loginButton");
+    document.getElementById(
+        "loginButton"
+    );
 
     const email =
     document
@@ -1192,7 +1719,8 @@ async function login(){
 
 
     button.disabled = true;
-    button.textContent = "Checking...";
+    button.textContent =
+        "Checking...";
 
 
     try{
@@ -1223,9 +1751,6 @@ async function login(){
 
             await auth.signOut();
 
-            button.disabled = false;
-            button.textContent = "Login";
-
             return;
         }
 
@@ -1236,7 +1761,9 @@ async function login(){
         );
 
 
-        await loadDashboard(refreshedUser);
+        await loadDashboard(
+            refreshedUser
+        );
 
 
     }catch(error){
@@ -1251,7 +1778,9 @@ async function login(){
     }finally{
 
         button.disabled = false;
-        button.textContent = "Login";
+
+        button.textContent =
+            "Login";
 
     }
 }
@@ -1261,7 +1790,8 @@ async function login(){
 AUTH STATE
 ===================================================== */
 
-auth.onAuthStateChanged(async user => {
+auth.onAuthStateChanged(
+async user => {
 
     if(!user){
         return;
@@ -1324,17 +1854,19 @@ async function loadDashboard(user){
         }
 
 
-        const data =
-        profile.data();
+        currentProfile =
+            profile.data();
 
 
         currentRole =
-        data.role || "teacher";
+            currentProfile.role ||
+            "teacher";
 
 
         if(
             currentRole !== "teacher" &&
-            currentRole !== "admin"
+            currentRole !== "admin" &&
+            currentRole !== "guard"
         ){
 
             showMessage(
@@ -1368,7 +1900,8 @@ async function loadDashboard(user){
         document
         .getElementById("userName")
         .textContent =
-        data.name || user.email;
+        currentProfile.name ||
+        user.email;
 
 
         document
@@ -1389,12 +1922,38 @@ async function loadDashboard(user){
         "🟢 Email verified";
 
 
+        const assignedSection =
+        currentProfile.section ||
+        "All";
+
+
+        document
+        .getElementById("assignedSection")
+        .textContent =
+        assignedSection;
+
+
+        configureRoleInterface();
+
+
         setDefaultExportDate();
 
 
         await loadStudents();
 
         await loadAttendance();
+
+
+        if(currentRole === "guard"){
+
+            setGateMode("IN");
+
+        }else{
+
+            setGateMode("IN");
+
+        }
+
 
         startScanner();
 
@@ -1413,6 +1972,131 @@ async function loadDashboard(user){
         );
 
     }
+}
+
+
+/* =====================================================
+ROLE INTERFACE
+===================================================== */
+
+function configureRoleInterface(){
+
+    const teacherInfo =
+    document.getElementById(
+        "teacherInfo"
+    );
+
+    const guardInfo =
+    document.getElementById(
+        "guardInfo"
+    );
+
+    const studentRegistrationCard =
+    document.getElementById(
+        "studentRegistrationCard"
+    );
+
+    const studentsCard =
+    document.getElementById(
+        "studentsCard"
+    );
+
+    const exportCard =
+    document.getElementById(
+        "exportCard"
+    );
+
+    const teacherDescription =
+    document.getElementById(
+        "teacherScannerDescription"
+    );
+
+    const guardDescription =
+    document.getElementById(
+        "guardScannerDescription"
+    );
+
+    if(currentRole === "guard"){
+
+        teacherInfo.classList.add("hidden");
+
+        guardInfo.classList.remove("hidden");
+
+        studentRegistrationCard
+        .classList.add("hidden");
+
+        studentsCard
+        .classList.add("hidden");
+
+        exportCard
+        .classList.add("hidden");
+
+        teacherDescription
+        .classList.add("hidden");
+
+        guardDescription
+        .classList.remove("hidden");
+
+    }else{
+
+        teacherInfo.classList.remove("hidden");
+
+        guardInfo.classList.add("hidden");
+
+        studentRegistrationCard
+        .classList.remove("hidden");
+
+        studentsCard
+        .classList.remove("hidden");
+
+        exportCard
+        .classList.remove("hidden");
+
+        teacherDescription
+        .classList.remove("hidden");
+
+        guardDescription
+        .classList.add("hidden");
+
+
+        const section =
+            currentProfile.section ||
+            "";
+
+
+        document
+        .getElementById(
+            "studentSection"
+        )
+        .value =
+            section;
+
+    }
+
+
+    if(currentRole === "admin"){
+
+        teacherInfo.classList.add("hidden");
+
+        guardInfo.classList.add("hidden");
+
+        studentRegistrationCard
+        .classList.remove("hidden");
+
+        studentsCard
+        .classList.remove("hidden");
+
+        exportCard
+        .classList.remove("hidden");
+
+        document
+        .getElementById(
+            "studentSection"
+        )
+        .readOnly = false;
+
+    }
+
 }
 
 
@@ -1439,6 +2123,7 @@ async function logout(){
 
 
     currentUser = null;
+    currentProfile = null;
     currentRole = null;
 
     students = [];
@@ -1460,14 +2145,28 @@ async function addStudent(){
 
     if(!currentUser){
 
-        alert("Please login first.");
+        alert(
+            "Please login first."
+        );
+
+        return;
+    }
+
+
+    if(currentRole === "guard"){
+
+        alert(
+            "Gate guards cannot register students."
+        );
 
         return;
     }
 
 
     const button =
-    document.getElementById("studentButton");
+    document.getElementById(
+        "studentButton"
+    );
 
 
     const name =
@@ -1483,11 +2182,20 @@ async function addStudent(){
     .value;
 
 
-    const section =
+    let section =
     document
     .getElementById("studentSection")
     .value
     .trim();
+
+
+    if(currentRole === "teacher"){
+
+        section =
+            currentProfile.section ||
+            section;
+
+    }
 
 
     if(!name || !grade || !section){
@@ -1500,11 +2208,81 @@ async function addStudent(){
     }
 
 
+    if(
+        currentRole === "teacher" &&
+        normalizeSection(section) !==
+        normalizeSection(
+            currentProfile.section
+        )
+    ){
+
+        alert(
+            "You can only register students in your assigned section."
+        );
+
+        return;
+    }
+
+
     button.disabled = true;
-    button.textContent = "Saving student...";
+
+    button.textContent =
+        "Checking section...";
 
 
     try{
+
+        /* -------------------------------------------------
+        VERIFY SECTION OWNER
+        ------------------------------------------------- */
+
+        if(currentRole === "teacher"){
+
+            const ownerSnapshot =
+            await db
+            .collection("users")
+            .where(
+                "role",
+                "==",
+                "teacher"
+            )
+            .where(
+                "sectionNormalized",
+                "==",
+                normalizeSection(section)
+            )
+            .limit(1)
+            .get();
+
+
+            if(ownerSnapshot.empty){
+
+                throw new Error(
+                    "The assigned section is not registered to an adviser."
+                );
+            }
+
+
+            const owner =
+                ownerSnapshot.docs[0];
+
+
+            if(
+                owner.id !==
+                currentUser.uid
+            ){
+
+                throw new Error(
+                    "This section belongs to another teacher/adviser."
+                );
+            }
+
+        }
+
+
+        button.textContent =
+            "Saving student...";
+
 
         const studentRef =
         db
@@ -1524,17 +2302,29 @@ async function addStudent(){
 
             section:section,
 
+            sectionNormalized:
+                normalizeSection(section),
+
             qrCode:studentId,
 
-            ownerId:currentUser.uid,
+            ownerId:
+                currentRole === "teacher"
+                ?
+                currentUser.uid
+                :
+                null,
 
-            createdBy:currentUser.uid,
+            createdBy:
+                currentUser.uid,
+
+            createdByRole:
+                currentRole,
 
             createdAt:
-            firebase
-            .firestore
-            .FieldValue
-            .serverTimestamp()
+                firebase
+                .firestore
+                .FieldValue
+                .serverTimestamp()
 
         };
 
@@ -1553,25 +2343,47 @@ async function addStudent(){
 
 
         document
-        .getElementById("studentName")
+        .getElementById(
+            "studentName"
+        )
         .value = "";
 
 
         document
-        .getElementById("studentGrade")
+        .getElementById(
+            "studentGrade"
+        )
         .value = "";
 
 
-        document
-        .getElementById("studentSection")
-        .value = "";
+        if(currentRole === "teacher"){
+
+            document
+            .getElementById(
+                "studentSection"
+            )
+            .value =
+                currentProfile.section;
+
+        }else{
+
+            document
+            .getElementById(
+                "studentSection"
+            )
+            .value = "";
+
+        }
 
 
         await loadStudents();
 
 
-        alert(
-            "Student registered successfully. QR generated."
+        notify(
+            "Student Registered",
+            name +
+            " was registered successfully.",
+            "success"
         );
 
 
@@ -1727,15 +2539,54 @@ async function loadStudents(){
 
     try{
 
-        const snapshot =
-        await db
-        .collection("students")
-        .where(
-            "ownerId",
-            "==",
-            currentUser.uid
-        )
-        .get();
+        let snapshot;
+
+
+        if(currentRole === "guard"){
+
+            /*
+            Guard does not need the student list.
+            Student identity is obtained only after scanning.
+            */
+
+            students = [];
+
+            document
+            .getElementById(
+                "totalStudents"
+            )
+            .textContent = "—";
+
+            document
+            .getElementById(
+                "gradeCount"
+            )
+            .textContent = "—";
+
+            return;
+        }
+
+
+        if(currentRole === "admin"){
+
+            snapshot =
+            await db
+            .collection("students")
+            .get();
+
+        }else{
+
+            snapshot =
+            await db
+            .collection("students")
+            .where(
+                "ownerId",
+                "==",
+                currentUser.uid
+            )
+            .get();
+
+        }
 
 
         students = [];
@@ -1755,7 +2606,9 @@ async function loadStudents(){
 
 
         document
-        .getElementById("totalStudents")
+        .getElementById(
+            "totalStudents"
+        )
         .textContent =
         students.length;
 
@@ -1776,7 +2629,9 @@ async function loadStudents(){
 
 
         document
-        .getElementById("studentsContainer")
+        .getElementById(
+            "studentsContainer"
+        )
         .innerHTML =
 
         `
@@ -1800,7 +2655,9 @@ function createGroupFilter(){
 
     const filter =
     document
-    .getElementById("groupFilter");
+    .getElementById(
+        "groupFilter"
+    );
 
 
     filter.innerHTML =
@@ -1832,12 +2689,16 @@ function createGroupFilter(){
     .forEach(group => {
 
         const option =
-        document.createElement("option");
+        document.createElement(
+            "option"
+        );
 
 
-        option.value = group;
+        option.value =
+            group;
 
-        option.textContent = group;
+        option.textContent =
+            group;
 
 
         filter.appendChild(option);
@@ -1846,7 +2707,9 @@ function createGroupFilter(){
 
 
     document
-    .getElementById("gradeCount")
+    .getElementById(
+        "gradeCount"
+    )
     .textContent =
 
     new Set(
@@ -1922,12 +2785,30 @@ function renderStudents(){
     container.innerHTML = "";
 
 
+    if(
+        Object.keys(groups).length === 0
+    ){
+
+        container.innerHTML =
+
+        `
+        <div class="message">
+        No students found.
+        </div>
+        `;
+
+        return;
+    }
+
+
     Object.keys(groups)
     .sort()
     .forEach(group => {
 
         const title =
-        document.createElement("h3");
+        document.createElement(
+            "h3"
+        );
 
 
         title.textContent =
@@ -1937,49 +2818,59 @@ function renderStudents(){
         " students)";
 
 
-        container.appendChild(title);
+        container.appendChild(
+            title
+        );
 
 
         const grid =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
 
         grid.className =
-        "student-grid";
+            "student-grid";
 
 
         groups[group]
         .forEach(student => {
 
             const card =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
 
             card.className =
-            "student-card";
+                "student-card";
 
 
             const title =
-            document.createElement("h3");
+            document.createElement(
+                "h3"
+            );
 
 
             title.textContent =
-            student.name;
+                student.name;
 
 
             card.appendChild(title);
 
 
             const gradeBadge =
-            document.createElement("span");
+            document.createElement(
+                "span"
+            );
 
 
             gradeBadge.className =
-            "badge";
+                "badge";
 
 
             gradeBadge.textContent =
-            student.grade;
+                student.grade;
 
 
             card.appendChild(
@@ -1988,15 +2879,17 @@ function renderStudents(){
 
 
             const sectionBadge =
-            document.createElement("span");
+            document.createElement(
+                "span"
+            );
 
 
             sectionBadge.className =
-            "badge";
+                "badge";
 
 
             sectionBadge.textContent =
-            student.section;
+                student.section;
 
 
             card.appendChild(
@@ -2005,25 +2898,31 @@ function renderStudents(){
 
 
             card.appendChild(
-                document.createElement("br")
+                document.createElement(
+                    "br"
+                )
             );
 
 
             card.appendChild(
-                document.createElement("br")
+                document.createElement(
+                    "br"
+                )
             );
 
 
             const qrButton =
-            document.createElement("button");
+            document.createElement(
+                "button"
+            );
 
 
             qrButton.className =
-            "btn-primary";
+                "btn-primary";
 
 
             qrButton.textContent =
-            "Show QR";
+                "Show QR";
 
 
             qrButton.onclick = () => {
@@ -2070,7 +2969,9 @@ function startScanner(){
 
 
     scanner =
-    new Html5Qrcode("reader");
+    new Html5Qrcode(
+        "reader"
+    );
 
 
     scanner.start(
@@ -2086,7 +2987,9 @@ function startScanner(){
 
         decodedText => {
 
-            processQRCode(decodedText);
+            processQRCode(
+                decodedText
+            );
 
         },
 
@@ -2119,6 +3022,74 @@ function startScanner(){
         );
 
     });
+}
+
+
+/* =====================================================
+GATE MODE
+===================================================== */
+
+function setGateMode(mode){
+
+    mode =
+        mode === "OUT"
+        ?
+        "OUT"
+        :
+        "IN";
+
+
+    gateMode = mode;
+
+
+    const scanMode =
+    document.getElementById(
+        "scanMode"
+    );
+
+
+    if(scanMode){
+
+        scanMode.value =
+            mode;
+
+    }
+
+
+    const inButton =
+    document.getElementById(
+        "gateInButton"
+    );
+
+
+    const outButton =
+    document.getElementById(
+        "gateOutButton"
+    );
+
+
+    inButton.classList.remove(
+        "active"
+    );
+
+    outButton.classList.remove(
+        "active"
+    );
+
+
+    if(mode === "IN"){
+
+        inButton.classList.add(
+            "active"
+        );
+
+    }else{
+
+        outButton.classList.add(
+            "active"
+        );
+
+    }
 }
 
 
@@ -2165,14 +3136,27 @@ async function processQRCode(studentId){
         studentDoc.data();
 
 
+        /*
+        Teacher/adviser can only scan students
+        belonging to their section.
+        Guard can scan all registered students.
+        */
+
         if(
+            currentRole === "teacher" &&
             student.ownerId !==
             currentUser.uid
         ){
 
             showScanResult(
-                "This QR does not belong to your account.",
+                "This QR does not belong to your assigned section.",
                 false
+            );
+
+            notify(
+                "Unauthorized Student",
+                "This student belongs to another adviser/section.",
+                "danger"
             );
 
             return;
@@ -2183,30 +3167,14 @@ async function processQRCode(studentId){
 
 
         const date =
-        now.toLocaleDateString(
-            "en-CA",
-            {
-                timeZone:"Asia/Manila"
-            }
-        );
+        getManilaDate();
 
 
         const time =
-        now.toLocaleTimeString(
-            "en-PH",
-            {
-                timeZone:"Asia/Manila",
-                hour:"2-digit",
-                minute:"2-digit",
-                second:"2-digit",
-                hour12:true
-            }
-        );
+        getManilaTime();
 
 
         const attendanceId =
-        currentUser.uid +
-        "_" +
         studentId +
         "_" +
         date;
@@ -2222,82 +3190,41 @@ async function processQRCode(studentId){
         await attendanceRef.get();
 
 
-        if(existing.exists){
+        /*
+        -------------------------------------------------
+        GATE OUT REQUEST
+        -------------------------------------------------
+        */
 
-            showScanResult(
+        if(gateMode === "OUT"){
 
-                student.name +
-                " is already marked present today.",
-
-                false
-
+            await processGateOut(
+                attendanceRef,
+                existing,
+                student,
+                studentId,
+                date,
+                time
             );
 
             return;
         }
 
 
-        await attendanceRef.set({
+        /*
+        -------------------------------------------------
+        GATE IN REQUEST
+        -------------------------------------------------
+        */
 
-            studentId:
+        await processGateIn(
+            attendanceRef,
+            existing,
+            student,
             studentId,
-
-            studentName:
-            student.name,
-
-            grade:
-            student.grade,
-
-            section:
-            student.section,
-
-            date:
             date,
-
-            timeIn:
-            time,
-
-            ownerId:
-            currentUser.uid,
-
-            createdBy:
-            currentUser.uid,
-
-            timestamp:
-            firebase
-            .firestore
-            .FieldValue
-            .serverTimestamp()
-
-        });
-
-
-        showScanResult(
-
-            `
-            <strong>
-            Attendance Recorded
-            </strong>
-            <br><br>
-
-            ${escapeHTML(student.name)}
-            <br>
-
-            ${escapeHTML(student.grade)}
-            -
-            ${escapeHTML(student.section)}
-            <br>
-
-            Time In:
-            ${escapeHTML(time)}
-            `,
-
-            true
-
+            time
         );
-
-
-        await loadAttendance();
 
 
     }catch(error){
@@ -2330,6 +3257,790 @@ async function processQRCode(studentId){
 
 
 /* =====================================================
+PROCESS GATE IN
+===================================================== */
+
+async function processGateIn(
+    attendanceRef,
+    existing,
+    student,
+    studentId,
+    date,
+    time
+){
+
+    /*
+    If no attendance exists today,
+    create the first Gate In.
+    */
+
+    if(!existing.exists){
+
+        await attendanceRef.set({
+
+            studentId:
+                studentId,
+
+            studentName:
+                student.name,
+
+            grade:
+                student.grade,
+
+            section:
+                student.section,
+
+            date:
+                date,
+
+            timeIn:
+                time,
+
+            gateInAt:
+                firebase
+                .firestore
+                .FieldValue
+                .serverTimestamp(),
+
+            gateOut:
+                "",
+
+            gateOutAt:
+                null,
+
+            status:
+                "INSIDE",
+
+            scanType:
+                "GATE_IN",
+
+            postTimeoutScan:
+                false,
+
+            ownerId:
+                student.ownerId ||
+                null,
+
+            createdBy:
+                currentUser.uid,
+
+            lastScanAt:
+                firebase
+                .firestore
+                .FieldValue
+                .serverTimestamp(),
+
+            timestamp:
+                firebase
+                .firestore
+                .FieldValue
+                .serverTimestamp()
+
+        });
+
+
+        showScanResult(
+
+            `
+            <strong>🟢 GATE IN RECORDED</strong>
+            <br><br>
+
+            ${escapeHTML(student.name)}
+            <br>
+
+            ${escapeHTML(student.grade)}
+            -
+            ${escapeHTML(student.section)}
+            <br><br>
+
+            Gate In:
+            ${escapeHTML(time)}
+
+            <br><br>
+
+            Timeout:
+            2 hours 30 minutes
+            `,
+
+            true
+
+        );
+
+
+        notify(
+            "Gate In Recorded",
+            student.name +
+            " is now marked INSIDE.",
+            "success"
+        );
+
+
+        showRecentScan(
+            student,
+            "GATE IN",
+            time,
+            false
+        );
+
+
+        await loadAttendance();
+
+        return;
+    }
+
+
+    /*
+    Existing attendance exists.
+    Check current status.
+    */
+
+    const record =
+        existing.data();
+
+
+    /*
+    If already INSIDE, calculate timeout.
+    */
+
+    if(
+        record.status === "INSIDE"
+    ){
+
+        const elapsed =
+            getElapsedMinutes(
+                record
+            );
+
+
+        if(elapsed >= TIMEOUT_MINUTES){
+
+            /*
+            Automatic timeout reached.
+            The new scan becomes an OUT scan.
+            */
+
+            await processAutomaticTimeout(
+                attendanceRef,
+                record,
+                student,
+                time
+            );
+
+            return;
+        }
+
+
+        /*
+        Not yet timeout.
+        Another Gate In is still a duplicate.
+        */
+
+        const remaining =
+            Math.max(
+                0,
+                TIMEOUT_MINUTES -
+                elapsed
+            );
+
+
+        showScanResult(
+
+            `
+            <strong>⚠️ ALREADY INSIDE</strong>
+            <br><br>
+
+            ${escapeHTML(student.name)}
+            <br>
+
+            Time In:
+            ${escapeHTML(
+                record.timeIn || ""
+            )}
+
+            <br><br>
+
+            Remaining before automatic Time Out:
+            <strong>
+            ${formatMinutes(
+                remaining
+            )}
+            </strong>
+            `,
+
+            false
+
+        );
+
+
+        notify(
+            "Student Already Inside",
+            student.name +
+            " is already inside the school.",
+            "warning"
+        );
+
+
+        showRecentScan(
+            student,
+            "DUPLICATE GATE IN",
+            time,
+            false
+        );
+
+
+        return;
+    }
+
+
+    /*
+    If already OUT, allow another scan and
+    record it as a post-timeout/re-entry alert.
+    */
+
+    if(
+        record.status === "OUT"
+    ){
+
+        await recordAfterTimeoutScan(
+            attendanceRef,
+            record,
+            student,
+            time
+        );
+
+        return;
+    }
+
+
+    /*
+    Unknown state.
+    */
+
+    showScanResult(
+        "Attendance record has an unknown status.",
+        false
+    );
+}
+
+
+/* =====================================================
+PROCESS GATE OUT
+===================================================== */
+
+async function processGateOut(
+    attendanceRef,
+    existing,
+    student,
+    studentId,
+    date,
+    time
+){
+
+    if(!existing.exists){
+
+        /*
+        No Gate In yet.
+        We still record the scan as an exit attempt.
+        */
+
+        await attendanceRef.set({
+
+            studentId:
+                studentId,
+
+            studentName:
+                student.name,
+
+            grade:
+                student.grade,
+
+            section:
+                student.section,
+
+            date:
+                date,
+
+            timeIn:
+                "",
+
+            gateInAt:
+                null,
+
+            gateOut:
+                time,
+
+            gateOutAt:
+                firebase
+                .firestore
+                .FieldValue
+                .serverTimestamp(),
+
+            status:
+                "OUT",
+
+            scanType:
+                "GATE_OUT_WITHOUT_IN",
+
+            postTimeoutScan:
+                true,
+
+            ownerId:
+                student.ownerId ||
+                null,
+
+            createdBy:
+                currentUser.uid,
+
+            lastScanAt:
+                firebase
+                .firestore
+                .FieldValue
+                .serverTimestamp(),
+
+            timestamp:
+                firebase
+                .firestore
+                .FieldValue
+                .serverTimestamp()
+
+        });
+
+
+        showScanResult(
+
+            `
+            <strong>🔴 GATE OUT WITHOUT GATE IN</strong>
+            <br><br>
+
+            ${escapeHTML(student.name)}
+            <br>
+
+            No Gate In record was found today.
+            <br><br>
+
+            Exit:
+            ${escapeHTML(time)}
+            `,
+
+            false
+
+        );
+
+
+        notify(
+            "Gate Out Without Gate In",
+            student.name +
+            " has no Gate In record today.",
+            "danger"
+        );
+
+
+        showRecentScan(
+            student,
+            "GATE OUT WITHOUT IN",
+            time,
+            true
+        );
+
+
+        await loadAttendance();
+
+        return;
+    }
+
+
+    const record =
+        existing.data();
+
+
+    /*
+    If currently inside:
+    normal Gate Out.
+    */
+
+    if(
+        record.status === "INSIDE"
+    ){
+
+        const elapsed =
+            getElapsedMinutes(
+                record
+            );
+
+
+        /*
+        If 2h30m has already elapsed,
+        mark as automatic timeout.
+        */
+
+        if(elapsed >= TIMEOUT_MINUTES){
+
+            await processAutomaticTimeout(
+                attendanceRef,
+                record,
+                student,
+                time
+            );
+
+            return;
+        }
+
+
+        /*
+        Normal manual Gate Out.
+        */
+
+        await attendanceRef.update({
+
+            gateOut:
+                time,
+
+            gateOutAt:
+                firebase
+                .firestore
+                .FieldValue
+                .serverTimestamp(),
+
+            status:
+                "OUT",
+
+            scanType:
+                "GATE_OUT",
+
+            postTimeoutScan:
+                false,
+
+            lastScanAt:
+                firebase
+                .firestore
+                .FieldValue
+                .serverTimestamp()
+
+        });
+
+
+        showScanResult(
+
+            `
+            <strong>🔵 GATE OUT RECORDED</strong>
+            <br><br>
+
+            ${escapeHTML(student.name)}
+            <br>
+
+            Gate In:
+            ${escapeHTML(
+                record.timeIn || ""
+            )}
+
+            <br>
+
+            Gate Out:
+            ${escapeHTML(time)}
+            `,
+
+            true
+
+        );
+
+
+        notify(
+            "Gate Out Recorded",
+            student.name +
+            " has exited the school.",
+            "success"
+        );
+
+
+        showRecentScan(
+            student,
+            "GATE OUT",
+            time,
+            false
+        );
+
+
+        await loadAttendance();
+
+        return;
+    }
+
+
+    /*
+    Already OUT.
+    Scan again -> red alert.
+    */
+
+    if(
+        record.status === "OUT"
+    ){
+
+        await recordAfterTimeoutScan(
+            attendanceRef,
+            record,
+            student,
+            time
+        );
+
+        return;
+    }
+
+
+    showScanResult(
+        "Unable to determine student's current attendance status.",
+        false
+    );
+}
+
+
+/* =====================================================
+AUTOMATIC TIMEOUT
+===================================================== */
+
+async function processAutomaticTimeout(
+    attendanceRef,
+    record,
+    student,
+    time
+){
+
+    const scanHistory =
+        Array.isArray(
+            record.scanHistory
+        )
+        ?
+        record.scanHistory
+        :
+        [];
+
+
+    scanHistory.push({
+
+        type:
+            "AUTOMATIC_TIMEOUT",
+
+        time:
+            time,
+
+        createdAt:
+            new Date().toISOString()
+
+    });
+
+
+    await attendanceRef.update({
+
+        gateOut:
+            time,
+
+        gateOutAt:
+            firebase
+            .firestore
+            .FieldValue
+            .serverTimestamp(),
+
+        status:
+            "OUT",
+
+        scanType:
+            "AUTOMATIC_TIMEOUT",
+
+        postTimeoutScan:
+            false,
+
+        timeoutApplied:
+            true,
+
+        scanHistory:
+            scanHistory,
+
+        lastScanAt:
+            firebase
+            .firestore
+            .FieldValue
+            .serverTimestamp()
+
+    });
+
+
+    showScanResult(
+
+        `
+        <strong>🟠 AUTOMATIC TIME OUT</strong>
+        <br><br>
+
+        ${escapeHTML(student.name)}
+        <br><br>
+
+        The student has reached the
+        <strong>2 hours 30 minutes</strong>
+        limit.
+        <br><br>
+
+        Time Out:
+        ${escapeHTML(time)}
+        `,
+
+        true
+
+    );
+
+
+    notify(
+        "Automatic Time Out",
+        student.name +
+        " reached the 2 hours 30 minutes limit.",
+        "warning"
+    );
+
+
+    showRecentScan(
+        student,
+        "AUTOMATIC TIME OUT",
+        time,
+        false
+    );
+
+
+    await loadAttendance();
+}
+
+
+/* =====================================================
+AFTER TIME OUT SCAN
+===================================================== */
+
+async function recordAfterTimeoutScan(
+    attendanceRef,
+    record,
+    student,
+    time
+){
+
+    const scanHistory =
+        Array.isArray(
+            record.scanHistory
+        )
+        ?
+        record.scanHistory
+        :
+        [];
+
+
+    scanHistory.push({
+
+        type:
+            "POST_TIMEOUT_SCAN",
+
+        time:
+            time,
+
+        createdAt:
+            new Date().toISOString(),
+
+        scannedBy:
+            currentUser.uid,
+
+        mode:
+            gateMode
+
+    });
+
+
+    const newAlertCount =
+        Number(
+            record.alertScanCount || 0
+        ) + 1;
+
+
+    await attendanceRef.update({
+
+        postTimeoutScan:
+            true,
+
+        alertScanCount:
+            newAlertCount,
+
+        scanType:
+            "POST_TIMEOUT_SCAN",
+
+        lastScanAt:
+            firebase
+            .firestore
+            .FieldValue
+            .serverTimestamp(),
+
+        scanHistory:
+            scanHistory
+
+    });
+
+
+    showScanResult(
+
+        `
+        <div class="red-alert">
+
+        <strong>🔴 ALERT — STUDENT SCANNED AFTER TIME OUT</strong>
+
+        <br><br>
+
+        ${escapeHTML(student.name)}
+
+        <br>
+
+        ${escapeHTML(student.grade)}
+        -
+        ${escapeHTML(student.section)}
+
+        <br><br>
+
+        Previous Time Out:
+        ${escapeHTML(
+            record.gateOut ||
+            ""
+        )}
+
+        <br>
+
+        New Scan:
+        ${escapeHTML(time)}
+
+        <br><br>
+
+        <strong>
+        ALERT SCAN #${newAlertCount}
+        </strong>
+
+        </div>
+        `,
+
+        false
+
+    );
+
+
+    notify(
+        "🔴 RED ALERT — AFTER TIME OUT",
+        student.name +
+        " scanned again after Time Out.",
+        "danger"
+    );
+
+
+    showRecentScan(
+        student,
+        "POST TIME-OUT SCAN",
+        time,
+        true
+    );
+
+
+    await loadAttendance();
+}
+
+
+/* =====================================================
 SCAN RESULT
 ===================================================== */
 
@@ -2339,8 +4050,7 @@ function showScanResult(
 ){
 
     const box =
-    document
-    .getElementById(
+    document.getElementById(
         "scanResult"
     );
 
@@ -2363,6 +4073,168 @@ function showScanResult(
 
 
 /* =====================================================
+RECENT SCAN
+===================================================== */
+
+function showRecentScan(
+    student,
+    type,
+    time,
+    alertMode
+){
+
+    const box =
+    document.getElementById(
+        "recentScan"
+    );
+
+
+    box.classList.remove(
+        "hidden"
+    );
+
+
+    if(alertMode){
+
+        box.classList.add(
+            "red"
+        );
+
+    }else{
+
+        box.classList.remove(
+            "red"
+        );
+
+    }
+
+
+    box.innerHTML =
+
+    `
+    <strong>
+    ${alertMode ? "🔴" : "🟢"}
+    ${escapeHTML(type)}
+    </strong>
+
+    <br><br>
+
+    Student:
+    <strong>
+    ${escapeHTML(student.name)}
+    </strong>
+
+    <br>
+
+    ${escapeHTML(student.grade)}
+    -
+    ${escapeHTML(student.section)}
+
+    <br>
+
+    Time:
+    ${escapeHTML(time)}
+    `;
+}
+
+
+/* =====================================================
+NOTIFICATIONS
+===================================================== */
+
+function notify(
+    title,
+    message,
+    type="success"
+){
+
+    const area =
+    document.getElementById(
+        "notificationArea"
+    );
+
+
+    const item =
+    document.createElement(
+        "div"
+    );
+
+
+    item.className =
+        "notification " +
+        type;
+
+
+    item.innerHTML =
+
+    `
+    <strong>
+    ${escapeHTML(title)}
+    </strong>
+
+    <div>
+    ${escapeHTML(message)}
+    </div>
+    `;
+
+
+    area.appendChild(item);
+
+
+    /*
+    Browser notification if permission
+    was previously granted.
+    */
+
+    if(
+        "Notification" in window &&
+        Notification.permission ===
+        "granted"
+    ){
+
+        try{
+
+            new Notification(
+                title,
+                {
+                    body:message
+                }
+            );
+
+        }catch(error){
+
+            console.log(error);
+
+        }
+
+    }
+
+
+    setTimeout(() => {
+
+        item.remove();
+
+    },5000);
+}
+
+
+function requestNotificationPermission(){
+
+    if(
+        "Notification" in window &&
+        Notification.permission ===
+        "default"
+    ){
+
+        Notification
+        .requestPermission()
+        .catch(() => {});
+
+    }
+}
+
+
+/* =====================================================
 LOAD ATTENDANCE
 ===================================================== */
 
@@ -2376,15 +4248,46 @@ async function loadAttendance(){
 
     try{
 
-        const snapshot =
-        await db
-        .collection("attendance")
-        .where(
-            "ownerId",
-            "==",
-            currentUser.uid
-        )
-        .get();
+        let snapshot;
+
+
+        if(currentRole === "guard"){
+
+            /*
+            Guard can read attendance records
+            for gate operation.
+            */
+
+            snapshot =
+            await db
+            .collection("attendance")
+            .where(
+                "date",
+                "==",
+                getManilaDate()
+            )
+            .get();
+
+        }else if(currentRole === "admin"){
+
+            snapshot =
+            await db
+            .collection("attendance")
+            .get();
+
+        }else{
+
+            snapshot =
+            await db
+            .collection("attendance")
+            .where(
+                "ownerId",
+                "==",
+                currentUser.uid
+            )
+            .get();
+
+        }
 
 
         attendance = [];
@@ -2407,21 +4310,11 @@ async function loadAttendance(){
             (a,b) => {
 
                 const aTime =
-                a.timestamp &&
-                a.timestamp.toMillis
-                ?
-                a.timestamp.toMillis()
-                :
-                0;
+                getRecordSortTime(a);
 
 
                 const bTime =
-                b.timestamp &&
-                b.timestamp.toMillis
-                ?
-                b.timestamp.toMillis()
-                :
-                0;
+                getRecordSortTime(b);
 
 
                 return bTime - aTime;
@@ -2434,13 +4327,7 @@ async function loadAttendance(){
 
 
         const today =
-        new Date()
-        .toLocaleDateString(
-            "en-CA",
-            {
-                timeZone:"Asia/Manila"
-            }
-        );
+        getManilaDate();
 
 
         const todayCount =
@@ -2458,7 +4345,27 @@ async function loadAttendance(){
         todayCount;
 
 
-        previewExport();
+        const insideCount =
+        attendance.filter(
+            record =>
+            record.date === today &&
+            record.status === "INSIDE"
+        ).length;
+
+
+        document
+        .getElementById(
+            "currentlyInside"
+        )
+        .textContent =
+        insideCount;
+
+
+        if(currentRole !== "guard"){
+
+            previewExport();
+
+        }
 
 
     }catch(error){
@@ -2477,7 +4384,7 @@ async function loadAttendance(){
 
         `
         <tr>
-        <td colspan="5">
+        <td colspan="9">
         Unable to load attendance records.
         </td>
         </tr>
@@ -2494,8 +4401,7 @@ RENDER ATTENDANCE
 function renderAttendance(){
 
     const table =
-    document
-    .getElementById(
+    document.getElementById(
         "attendanceTable"
     );
 
@@ -2508,7 +4414,7 @@ function renderAttendance(){
         table.innerHTML =
         `
         <tr>
-        <td colspan="5">
+        <td colspan="9">
         No attendance records yet.
         </td>
         </tr>
@@ -2521,11 +4427,26 @@ function renderAttendance(){
     attendance.forEach(record => {
 
         const row =
-        document.createElement("tr");
+        document.createElement(
+            "tr"
+        );
+
+
+        if(
+            record.postTimeoutScan === true
+        ){
+
+            row.classList.add(
+                "red-row"
+            );
+
+        }
 
 
         const name =
-        document.createElement("td");
+        document.createElement(
+            "td"
+        );
 
         name.textContent =
         record.studentName || "";
@@ -2534,7 +4455,9 @@ function renderAttendance(){
 
 
         const grade =
-        document.createElement("td");
+        document.createElement(
+            "td"
+        );
 
         grade.textContent =
         record.grade || "";
@@ -2543,7 +4466,9 @@ function renderAttendance(){
 
 
         const section =
-        document.createElement("td");
+        document.createElement(
+            "td"
+        );
 
         section.textContent =
         record.section || "";
@@ -2552,7 +4477,9 @@ function renderAttendance(){
 
 
         const date =
-        document.createElement("td");
+        document.createElement(
+            "td"
+        );
 
         date.textContent =
         record.date || "";
@@ -2560,13 +4487,137 @@ function renderAttendance(){
         row.appendChild(date);
 
 
-        const time =
-        document.createElement("td");
+        const timeIn =
+        document.createElement(
+            "td"
+        );
 
-        time.textContent =
-        record.timeIn || "";
+        timeIn.textContent =
+        record.timeIn || "—";
 
-        row.appendChild(time);
+        row.appendChild(timeIn);
+
+
+        const timeOut =
+        document.createElement(
+            "td"
+        );
+
+        timeOut.textContent =
+        record.gateOut || "—";
+
+        row.appendChild(timeOut);
+
+
+        const status =
+        document.createElement(
+            "td"
+        );
+
+
+        if(
+            record.postTimeoutScan
+        ){
+
+            status.innerHTML =
+            `
+            <span class="status-badge status-alert">
+            🔴 ALERT
+            </span>
+            `;
+
+        }else if(
+            record.status === "INSIDE"
+        ){
+
+            status.innerHTML =
+            `
+            <span class="status-badge status-in">
+            🟢 INSIDE
+            </span>
+            `;
+
+        }else{
+
+            status.innerHTML =
+            `
+            <span class="status-badge status-out">
+            🔵 OUT
+            </span>
+            `;
+
+        }
+
+
+        row.appendChild(status);
+
+
+        const scanType =
+        document.createElement(
+            "td"
+        );
+
+
+        let scanLabel =
+            record.scanType ||
+            "—";
+
+
+        if(
+            scanLabel ===
+            "AUTOMATIC_TIMEOUT"
+        ){
+
+            scanLabel =
+                "AUTO TIME OUT";
+
+        }
+
+
+        if(
+            scanLabel ===
+            "POST_TIMEOUT_SCAN"
+        ){
+
+            scanLabel =
+                "🔴 POST TIME OUT";
+
+        }
+
+
+        scanType.textContent =
+            scanLabel;
+
+
+        row.appendChild(
+            scanType
+        );
+
+
+        const lastScan =
+        document.createElement(
+            "td"
+        );
+
+
+        lastScan.textContent =
+            record.lastScanAt &&
+            record.lastScanAt.toDate
+            ?
+            formatDateTime(
+                record.lastScanAt.toDate()
+            )
+            :
+            (
+                record.gateOut ||
+                record.timeIn ||
+                "—"
+            );
+
+
+        row.appendChild(
+            lastScan
+        );
 
 
         table.appendChild(row);
@@ -2576,7 +4627,160 @@ function renderAttendance(){
 
 
 /* =====================================================
-EXPORT DATE
+TIMEOUT CHECK
+===================================================== */
+
+function getElapsedMinutes(record){
+
+    if(
+        !record ||
+        !record.timeIn
+    ){
+
+        return 0;
+    }
+
+
+    /*
+    Prefer Firestore server timestamp
+    when available.
+    */
+
+    if(
+        record.gateInAt &&
+        record.gateInAt.toDate
+    ){
+
+        const start =
+            record.gateInAt.toDate();
+
+        const elapsed =
+            (
+                Date.now() -
+                start.getTime()
+            ) /
+            60000;
+
+
+        return Math.max(
+            0,
+            elapsed
+        );
+
+    }
+
+
+    /*
+    Fallback: parse displayed Time In.
+    */
+
+    const parsed =
+        parseManilaTime(
+            record.date,
+            record.timeIn
+        );
+
+
+    if(!parsed){
+
+        return 0;
+    }
+
+
+    return Math.max(
+        0,
+        (
+            Date.now() -
+            parsed.getTime()
+        ) / 60000
+    );
+}
+
+
+function parseManilaTime(
+    date,
+    time
+){
+
+    if(
+        !date ||
+        !time
+    ){
+
+        return null;
+    }
+
+
+    const match =
+        String(time).match(
+            /^(\d{1,2}):(\d{2}):(\d{2})\s*(AM|PM)?$/i
+        );
+
+
+    if(!match){
+
+        return null;
+    }
+
+
+    let hour =
+        Number(match[1]);
+
+    const minute =
+        Number(match[2]);
+
+    const second =
+        Number(match[3]);
+
+    const ampm =
+        match[4]
+        ?
+        match[4].toUpperCase()
+        :
+        null;
+
+
+    if(ampm === "PM" && hour < 12){
+
+        hour += 12;
+
+    }
+
+
+    if(ampm === "AM" && hour === 12){
+
+        hour = 0;
+
+    }
+
+
+    /*
+    Asia/Manila is UTC+8.
+    */
+
+    const iso =
+        `${date}T` +
+        `${String(hour).padStart(2,"0")}:` +
+        `${String(minute).padStart(2,"0")}:` +
+        `${String(second).padStart(2,"0")}+08:00`;
+
+
+    const result =
+        new Date(iso);
+
+
+    return isNaN(
+        result.getTime()
+    )
+    ?
+    null
+    :
+    result;
+}
+
+
+/* =====================================================
+MANILA DATE / TIME
 ===================================================== */
 
 function getManilaDate(){
@@ -2585,11 +4789,151 @@ function getManilaDate(){
     .toLocaleDateString(
         "en-CA",
         {
-            timeZone:"Asia/Manila"
+            timeZone:
+                "Asia/Manila"
         }
     );
 }
 
+
+function getManilaTime(){
+
+    return new Date()
+    .toLocaleTimeString(
+        "en-PH",
+        {
+            timeZone:
+                "Asia/Manila",
+
+            hour:
+                "2-digit",
+
+            minute:
+                "2-digit",
+
+            second:
+                "2-digit",
+
+            hour12:
+                true
+        }
+    );
+}
+
+
+function formatDateTime(date){
+
+    if(!date){
+
+        return "";
+    }
+
+
+    return date.toLocaleString(
+        "en-PH",
+        {
+            timeZone:
+                "Asia/Manila",
+
+            year:
+                "numeric",
+
+            month:
+                "2-digit",
+
+            day:
+                "2-digit",
+
+            hour:
+                "2-digit",
+
+            minute:
+                "2-digit",
+
+            second:
+                "2-digit",
+
+            hour12:
+                true
+        }
+    );
+}
+
+
+/* =====================================================
+FORMAT MINUTES
+===================================================== */
+
+function formatMinutes(minutes){
+
+    minutes =
+        Math.ceil(
+            Number(minutes) || 0
+        );
+
+
+    const hours =
+        Math.floor(
+            minutes / 60
+        );
+
+
+    const mins =
+        minutes % 60;
+
+
+    if(hours > 0){
+
+        return (
+            hours +
+            " hr " +
+            mins +
+            " min"
+        );
+
+    }
+
+
+    return (
+        mins +
+        " min"
+    );
+}
+
+
+/* =====================================================
+SORT TIME
+===================================================== */
+
+function getRecordSortTime(record){
+
+    if(
+        record.lastScanAt &&
+        record.lastScanAt.toMillis
+    ){
+
+        return record.lastScanAt.toMillis();
+
+    }
+
+
+    if(
+        record.timestamp &&
+        record.timestamp.toMillis
+    ){
+
+        return record.timestamp.toMillis();
+
+    }
+
+
+    return 0;
+}
+
+
+/* =====================================================
+EXPORT DATE
+===================================================== */
 
 function setDefaultExportDate(){
 
@@ -2605,7 +4949,7 @@ function setDefaultExportDate(){
     ){
 
         dateInput.value =
-        getManilaDate();
+            getManilaDate();
 
     }
 }
@@ -2617,15 +4961,25 @@ EXPORT SECTION FILTER
 
 function updateExportSections(){
 
+    if(currentRole === "guard"){
+
+        return;
+    }
+
+
     const grade =
     document
-    .getElementById("exportGrade")
+    .getElementById(
+        "exportGrade"
+    )
     .value;
 
 
     const sectionSelect =
     document
-    .getElementById("exportSection");
+    .getElementById(
+        "exportSection"
+    );
 
 
     const sections =
@@ -2666,15 +5020,21 @@ function updateExportSections(){
     .forEach(section => {
 
         const option =
-        document.createElement("option");
+        document.createElement(
+            "option"
+        );
 
 
-        option.value = section;
+        option.value =
+            section;
 
-        option.textContent = section;
+        option.textContent =
+            section;
 
 
-        sectionSelect.appendChild(option);
+        sectionSelect.appendChild(
+            option
+        );
 
     });
 }
@@ -2688,26 +5048,35 @@ function getFilteredExportData(){
 
     const date =
     document
-    .getElementById("exportDate")
+    .getElementById(
+        "exportDate"
+    )
     .value;
 
 
     const grade =
     document
-    .getElementById("exportGrade")
+    .getElementById(
+        "exportGrade"
+    )
     .value;
 
 
     const section =
     document
-    .getElementById("exportSection")
+    .getElementById(
+        "exportSection"
+    )
     .value;
 
 
     let filtered =
     attendance.filter(record => {
 
-        if(date && record.date !== date){
+        if(
+            date &&
+            record.date !== date
+        ){
 
             return false;
         }
@@ -2768,6 +5137,14 @@ PREVIEW EXPORT
 function previewExport(){
 
     if(
+        currentRole === "guard"
+    ){
+
+        return;
+    }
+
+
+    if(
         !document.getElementById(
             "exportDate"
         )
@@ -2779,19 +5156,25 @@ function previewExport(){
 
     const date =
     document
-    .getElementById("exportDate")
+    .getElementById(
+        "exportDate"
+    )
     .value;
 
 
     const grade =
     document
-    .getElementById("exportGrade")
+    .getElementById(
+        "exportGrade"
+    )
     .value;
 
 
     const section =
     document
-    .getElementById("exportSection")
+    .getElementById(
+        "exportSection"
+    )
     .value;
 
 
@@ -2800,9 +5183,11 @@ function previewExport(){
 
 
     document
-    .getElementById("exportPresent")
+    .getElementById(
+        "exportPresent"
+    )
     .textContent =
-    filtered.length;
+        filtered.length;
 
 
     let possibleStudents =
@@ -2832,9 +5217,11 @@ function previewExport(){
 
 
     document
-    .getElementById("exportStudents")
+    .getElementById(
+        "exportStudents"
+    )
     .textContent =
-    possibleStudents.length;
+        possibleStudents.length;
 
 
     const percentage =
@@ -2850,9 +5237,11 @@ function previewExport(){
 
 
     document
-    .getElementById("exportPercentage")
+    .getElementById(
+        "exportPercentage"
+    )
     .textContent =
-    percentage + "%";
+        percentage + "%";
 
 
     const preview =
@@ -2869,7 +5258,10 @@ function previewExport(){
         `
         <div class="message">
         No attendance records found for
-        ${escapeHTML(date || "the selected date")}.
+        ${escapeHTML(
+            date ||
+            "the selected date"
+        )}.
         </div>
         `;
 
@@ -2891,7 +5283,9 @@ function previewExport(){
     <th>Grade</th>
     <th>Section</th>
     <th>Date</th>
-    <th>Time In</th>
+    <th>Gate In</th>
+    <th>Gate Out</th>
+    <th>Status</th>
     </tr>
 
     </thead>
@@ -2905,7 +5299,15 @@ function previewExport(){
 
             html += `
 
-            <tr>
+            <tr
+            ${
+                record.postTimeoutScan
+                ?
+                'style="background:#fee2e2;color:#991b1b;font-weight:bold;"'
+                :
+                ''
+            }
+            >
 
             <td>
             ${index + 1}
@@ -2937,8 +5339,29 @@ function previewExport(){
 
             <td>
             ${escapeHTML(
-                record.timeIn
+                record.timeIn ||
+                "—"
             )}
+            </td>
+
+            <td>
+            ${escapeHTML(
+                record.gateOut ||
+                "—"
+            )}
+            </td>
+
+            <td>
+            ${
+                record.postTimeoutScan
+                ?
+                "🔴 ALERT"
+                :
+                escapeHTML(
+                    record.status ||
+                    ""
+                )
+            }
             </td>
 
             </tr>
@@ -2960,7 +5383,8 @@ function previewExport(){
     `;
 
 
-    preview.innerHTML = html;
+    preview.innerHTML =
+        html;
 }
 
 
@@ -2986,20 +5410,26 @@ function downloadCSV(){
 
     const date =
     document
-    .getElementById("exportDate")
+    .getElementById(
+        "exportDate"
+    )
     .value ||
     getManilaDate();
 
 
     const grade =
     document
-    .getElementById("exportGrade")
+    .getElementById(
+        "exportGrade"
+    )
     .value;
 
 
     const section =
     document
-    .getElementById("exportSection")
+    .getElementById(
+        "exportSection"
+    )
     .value;
 
 
@@ -3007,11 +5437,17 @@ function downloadCSV(){
 
 
     rows.push([
+
         "Student",
         "Grade",
         "Section",
         "Date",
-        "Time In"
+        "Gate In",
+        "Gate Out",
+        "Status",
+        "Scan Type",
+        "Alert Scan Count"
+
     ]);
 
 
@@ -3027,7 +5463,19 @@ function downloadCSV(){
 
             record.date || "",
 
-            record.timeIn || ""
+            record.timeIn || "",
+
+            record.gateOut || "",
+
+            record.postTimeoutScan
+            ?
+            "ALERT"
+            :
+            record.status || "",
+
+            record.scanType || "",
+
+            record.alertScanCount || 0
 
         ]);
 
@@ -3050,7 +5498,8 @@ function downloadCSV(){
     new Blob(
         ["\uFEFF" + csv],
         {
-            type:"text/csv;charset=utf-8;"
+            type:
+            "text/csv;charset=utf-8;"
         }
     );
 
@@ -3063,12 +5512,13 @@ function downloadCSV(){
     document.createElement("a");
 
 
-    link.href = url;
+    link.href =
+        url;
 
 
     let filename =
-    "Attendance_" +
-    date;
+        "Attendance_" +
+        date;
 
 
     if(grade !== "ALL"){
@@ -3099,19 +5549,25 @@ function downloadCSV(){
 
 
     link.download =
-    filename;
+        filename;
 
 
-    document.body.appendChild(link);
+    document.body.appendChild(
+        link
+    );
 
 
     link.click();
 
 
-    document.body.removeChild(link);
+    document.body.removeChild(
+        link
+    );
 
 
-    URL.revokeObjectURL(url);
+    URL.revokeObjectURL(
+        url
+    );
 
 }
 
@@ -3123,7 +5579,9 @@ CSV ESCAPE
 function csvEscape(value){
 
     const text =
-    String(value ?? "");
+    String(
+        value ?? ""
+    );
 
 
     if(
@@ -3169,19 +5627,25 @@ function printAttendance(){
 
     const date =
     document
-    .getElementById("exportDate")
+    .getElementById(
+        "exportDate"
+    )
     .value;
 
 
     const grade =
     document
-    .getElementById("exportGrade")
+    .getElementById(
+        "exportGrade"
+    )
     .value;
 
 
     const section =
     document
-    .getElementById("exportSection")
+    .getElementById(
+        "exportSection"
+    )
     .value;
 
 
@@ -3210,7 +5674,15 @@ function printAttendance(){
 
             rows += `
 
-            <tr>
+            <tr
+            ${
+                record.postTimeoutScan
+                ?
+                'style="background:#fee2e2;color:#991b1b;font-weight:bold;"'
+                :
+                ''
+            }
+            >
 
             <td>
             ${index + 1}
@@ -3242,8 +5714,29 @@ function printAttendance(){
 
             <td>
             ${escapeHTML(
-                record.timeIn
+                record.timeIn ||
+                "—"
             )}
+            </td>
+
+            <td>
+            ${escapeHTML(
+                record.gateOut ||
+                "—"
+            )}
+            </td>
+
+            <td>
+            ${
+                record.postTimeoutScan
+                ?
+                "🔴 ALERT"
+                :
+                escapeHTML(
+                    record.status ||
+                    ""
+                )
+            }
             </td>
 
             </tr>
@@ -3303,6 +5796,12 @@ margin-top:20px;
 font-weight:bold;
 }
 
+.alert{
+background:#fee2e2;
+color:#991b1b;
+font-weight:bold;
+}
+
 @media print{
 
 button{
@@ -3353,7 +5852,9 @@ ${escapeHTML(section)}
 <th>Grade</th>
 <th>Section</th>
 <th>Date</th>
-<th>Time In</th>
+<th>Gate In</th>
+<th>Gate Out</th>
+<th>Status</th>
 
 </tr>
 
@@ -3369,7 +5870,7 @@ ${rows}
 
 <div class="summary">
 
-Total Present:
+Total Records:
 ${filtered.length}
 
 </div>
@@ -3393,6 +5894,26 @@ Print Report
 
 
 /* =====================================================
+NORMALIZE SECTION
+===================================================== */
+
+function normalizeSection(
+    section
+){
+
+    return String(
+        section || ""
+    )
+    .trim()
+    .replace(
+        /\s+/g,
+        " "
+    )
+    .toLowerCase();
+}
+
+
+/* =====================================================
 FIREBASE ERROR
 ===================================================== */
 
@@ -3401,6 +5922,15 @@ function friendlyFirebaseError(error){
     if(!error){
 
         return "An unexpected error occurred.";
+    }
+
+
+    if(
+        error.message &&
+        !error.code
+    ){
+
+        return error.message;
     }
 
 
@@ -3467,23 +5997,182 @@ SECURITY HELPERS
 
 function escapeHTML(value){
 
-    return String(value || "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
+    return String(
+        value || ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
 }
 
 
 function escapeJS(value){
 
-    return String(value || "")
-    .replace(/\\/g,"\\\\")
-    .replace(/'/g,"\\'")
-    .replace(/\n/g,"\\n")
-    .replace(/\r/g,"\\r");
+    return String(
+        value || ""
+    )
+    .replace(
+        /\\/g,
+        "\\\\"
+    )
+    .replace(
+        /'/g,
+        "\\'"
+    )
+    .replace(
+        /\n/g,
+        "\\n"
+    )
+    .replace(
+        /\r/g,
+        "\\r"
+    );
 }
+
+
+/* =====================================================
+REQUEST NOTIFICATION PERMISSION
+===================================================== */
+
+document.addEventListener(
+    "click",
+    function(){
+
+        requestNotificationPermission();
+
+    },
+    {
+        once:true
+    }
+);
+
+
+/* =====================================================
+AUTO TIMEOUT CHECK
+===================================================== */
+
+setInterval(
+async function(){
+
+    if(
+        !currentUser ||
+        attendance.length === 0
+    ){
+
+        return;
+    }
+
+
+    const today =
+        getManilaDate();
+
+
+    const active =
+        attendance.filter(
+            record =>
+                record.date === today &&
+                record.status === "INSIDE"
+        );
+
+
+    for(
+        const record of active
+    ){
+
+        const elapsed =
+            getElapsedMinutes(
+                record
+            );
+
+
+        if(
+            elapsed >=
+            TIMEOUT_MINUTES
+        ){
+
+            /*
+            Only automatically update records
+            when the page is active and the user
+            has permission to write.
+            */
+
+            try{
+
+                const student =
+                    {
+                        name:
+                            record.studentName,
+
+                        grade:
+                            record.grade,
+
+                        section:
+                            record.section
+                    };
+
+
+                const ref =
+                    db
+                    .collection(
+                        "attendance"
+                    )
+                    .doc(
+                        record.id
+                    );
+
+
+                const latest =
+                    await ref.get();
+
+
+                if(
+                    latest.exists &&
+                    latest.data().status ===
+                    "INSIDE"
+                ){
+
+                    await processAutomaticTimeout(
+                        ref,
+                        latest.data(),
+                        student,
+                        getManilaTime()
+                    );
+
+                }
+
+            }catch(error){
+
+                console.log(
+                    "Automatic timeout check:",
+                    error
+                );
+
+            }
+
+        }
+
+    }
+
+},
+30000
+);
 
 </script>
 
